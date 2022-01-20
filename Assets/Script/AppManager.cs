@@ -20,6 +20,8 @@ public class AppManager : MonoBehaviour
 
     public bool isRightHanded = true; // use which controller by default
 
+    private bool isTaskStarted = false;
+
 
     [Serializable]
     class MySoundClip
@@ -29,7 +31,7 @@ public class AppManager : MonoBehaviour
         public GameObject tarObject;
         public AudioClip audioClip;
         public bool isLoop = false;
-        public bool isPlayOnWake = false;
+        //public bool isPlayOnWake = false;
         public Vector3 scale = new Vector3(0.1f, 0.1f, 0.1f);
         public float indicatorHeight = 0f;
     }
@@ -101,7 +103,7 @@ public class AppManager : MonoBehaviour
                 }
                 else if (OVRInput.GetDown(OVRInput.Button.One))
                 {
-                    PreviousMethod();
+                    StartATask();
                 }
             }
             else
@@ -113,8 +115,9 @@ public class AppManager : MonoBehaviour
                 }
                 else if (OVRInput.GetDown(OVRInput.Button.Three))
                 {
-                    PreviousMethod();
+                    StartATask();
                 }
+               
             }
         }
         // Individual controller
@@ -126,7 +129,7 @@ public class AppManager : MonoBehaviour
             }
             else if (OVRInput.GetDown(OVRInput.Button.One))
             {
-                PreviousMethod();
+                StartATask();
             }
         }
     }
@@ -151,19 +154,32 @@ public class AppManager : MonoBehaviour
         SetTestState(curState);
     }
 
-    private void PreviousMethod()
-    {
-        int curState = (int)myTestState;
-        if (curState <= 0)
-        {
-            curState = 1;
-        }
-        else
-        {
-            curState--;
-        }
+    //private void PreviousMethod()
+    //{
+    //    int curState = (int)myTestState;
+    //    if (curState <= 0)
+    //    {
+    //        curState = 1;
+    //    }
+    //    else
+    //    {
+    //        curState--;
+    //    }
 
-        SetTestState(curState);
+    //    SetTestState(curState);
+    //}
+
+    private void StartATask()
+    {
+        if (!isTaskStarted)
+        {
+            MiniPromptController.instance.ShowSuggestionText();
+
+            audioSourceList[0].GetComponentInChildren<MusicPlayer>().StopPlaying();
+            audioSourceList[0].GetComponentInChildren<MusicPlayer>().StartPlaying();
+
+            isTaskStarted = true;
+        }
     }
 
     public void startHapticFeedback()
@@ -190,7 +206,7 @@ public class AppManager : MonoBehaviour
             var objMusicPlayer = go.GetComponentInChildren<MusicPlayer>();
             objMusicPlayer.audioClip = obj.audioClip;
             objMusicPlayer.isLoop = obj.isLoop;
-            objMusicPlayer.isAutoPlay = obj.isPlayOnWake;
+            //objMusicPlayer.isAutoPlay = obj.isPlayOnWake;
             objMusicPlayer.indicatorIcon = obj.sprite;
 
             go.transform.SetParent(container);
