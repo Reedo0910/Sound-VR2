@@ -14,7 +14,7 @@ public class Interactable : MonoBehaviour
             gameObject.GetComponent<Click>().onClick();
         }
 
-        AppManager.instance.startHapticFeedback();
+        AppManager.instance.CompleteATask("Source_" + gameObject.name);
 
         //for (int i = 0; i < AppManager.instance.audioSourceList.Count; i++)
         //{

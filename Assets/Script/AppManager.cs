@@ -22,6 +22,9 @@ public class AppManager : MonoBehaviour
 
     private bool isTaskStarted = false;
 
+    public string currentPlayingObject = "";
+    private int currentPlayingObjectIndex = -1;
+
 
     [Serializable]
     class MySoundClip
@@ -39,7 +42,9 @@ public class AppManager : MonoBehaviour
     [SerializeField]
     private List<MySoundClip> MySoundClipList;
 
-    public List<GameObject> audioSourceList = new List<GameObject>();
+    private List<int> objectRandomList = new List<int>();
+
+    private List<GameObject> audioSourceList = new List<GameObject>();
 
     public enum TestType
     {
@@ -84,6 +89,8 @@ public class AppManager : MonoBehaviour
 
         SetTestState((int)myTestState);
         BindSoundSource();
+
+        GenerateRandomList();
     }
 
     // Update is called once per frame
@@ -173,12 +180,39 @@ public class AppManager : MonoBehaviour
     {
         if (!isTaskStarted)
         {
-            MiniPromptController.instance.ShowSuggestionText();
+            if (objectRandomList.Count > 0)
+            {
+                MiniPromptController.instance.ShowSuggestionText();
 
-            audioSourceList[0].GetComponentInChildren<MusicPlayer>().StopPlaying();
-            audioSourceList[0].GetComponentInChildren<MusicPlayer>().StartPlaying();
+                currentPlayingObjectIndex = objectRandomList[UnityEngine.Random.Range(0, objectRandomList.Count)];
+                objectRandomList.Remove(currentPlayingObjectIndex);
 
-            isTaskStarted = true;
+                audioSourceList[currentPlayingObjectIndex].GetComponentInChildren<MusicPlayer>().StopPlaying();
+                audioSourceList[currentPlayingObjectIndex].GetComponentInChildren<MusicPlayer>().StartPlaying();
+
+                currentPlayingObject = audioSourceList[currentPlayingObjectIndex].name;
+
+                isTaskStarted = true;
+            }
+        }
+    }
+
+    public void CompleteATask(string name)
+    {
+        if (isTaskStarted)
+        {
+            if (name == currentPlayingObject)
+            {
+                startHapticFeedback();
+            }
+
+            MiniPromptController.instance.HideSuggestionText();
+
+            audioSourceList[currentPlayingObjectIndex].GetComponentInChildren<MusicPlayer>().StopPlaying();
+
+            currentPlayingObject = "";
+
+            isTaskStarted = false;
         }
     }
 
@@ -225,6 +259,15 @@ public class AppManager : MonoBehaviour
             {
                 obj.transform.position = tar.tarObject.transform.position;
             }
+        }
+    }
+
+    private void GenerateRandomList()
+    {
+        objectRandomList.Clear();
+        for (int i = 0; i < audioSourceList.Count; i++)
+        {
+            objectRandomList.Add(i);
         }
     }
 
