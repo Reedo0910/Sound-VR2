@@ -4143,7 +4143,7 @@ MonoBehaviour:
   - title: Baby Talk
     sprite: {fileID: 21300000, guid: dd82f6167613cb247aed5d875b78b8a9, type: 3}
     tarObject: {fileID: 193665401}
-    audioClip: {fileID: 8300000, guid: 4bd8129850fddf743b348174d6b3f537, type: 3}
+    audioClip: {fileID: 8300000, guid: 3275931e7a1c2d143bc616f5d2d750f7, type: 3}
     isLoop: 0
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 2
@@ -4154,6 +4154,13 @@ MonoBehaviour:
     isLoop: 0
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 5.5
+  - title: Phone Ring
+    sprite: {fileID: 21300000, guid: 60008737da23f9b4ab33b159d8dd9e34, type: 3}
+    tarObject: {fileID: 158939736}
+    audioClip: {fileID: 8300000, guid: b745c9a400a860b4d96d7b8ef8bb7012, type: 3}
+    isLoop: 0
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    indicatorHeight: 2
   onObjectIndicatorState: 0
   myTestState: 1
 --- !u!4 &1657830282
