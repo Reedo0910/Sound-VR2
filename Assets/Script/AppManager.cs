@@ -49,10 +49,18 @@ public class AppManager : MonoBehaviour
     public enum TestType
     {
         Off = 0,
-        FullMapWithEnv = 1
+        IconMapWithIconTag = 1,
+        IconMapWithTextTag = 2,
+        TextMapWithIconTag = 3,
+        TextMapWithTextTag = 4
     };
 
     public bool onObjectIndicatorState = false;
+    public bool isIconicTagIndicator = false;
+    public bool isTextTagIndicator = false;
+
+    public bool isIconicMapIndicator = false;
+    public bool isTextMapIndicator = false;
 
     public TestType myTestState = TestType.Off;
 
@@ -124,7 +132,7 @@ public class AppManager : MonoBehaviour
                 {
                     StartATask();
                 }
-               
+
             }
         }
         // Individual controller
@@ -149,7 +157,7 @@ public class AppManager : MonoBehaviour
     private void NextMethod()
     {
         int curState = (int)myTestState;
-        if (curState >= 1)
+        if (curState >= 4)
         {
             curState = 0;
         }
@@ -166,7 +174,7 @@ public class AppManager : MonoBehaviour
     //    int curState = (int)myTestState;
     //    if (curState <= 0)
     //    {
-    //        curState = 1;
+    //        curState = 4;
     //    }
     //    else
     //    {
@@ -242,6 +250,7 @@ public class AppManager : MonoBehaviour
             objMusicPlayer.isLoop = obj.isLoop;
             //objMusicPlayer.isAutoPlay = obj.isPlayOnWake;
             objMusicPlayer.indicatorIcon = obj.sprite;
+            objMusicPlayer.indicatorText = obj.title;
 
             go.transform.SetParent(container);
 
@@ -307,10 +316,36 @@ public class AppManager : MonoBehaviour
 
         switch ((TestType)testState)
         {
-            case TestType.FullMapWithEnv:
+            case TestType.IconMapWithIconTag:
                 HUDMap.SetActive(true);
                 onObjectIndicatorState = true;
-                myTestState = TestType.FullMapWithEnv;
+                isIconicMapIndicator = true;
+                isIconicTagIndicator = true;
+                myTestState = TestType.IconMapWithIconTag;
+                break;
+
+            case TestType.IconMapWithTextTag:
+                HUDMap.SetActive(true);
+                onObjectIndicatorState = true;
+                isIconicMapIndicator = true;
+                isTextTagIndicator = true;
+                myTestState = TestType.IconMapWithTextTag;
+                break;
+
+            case TestType.TextMapWithIconTag:
+                HUDMap.SetActive(true);
+                onObjectIndicatorState = true;
+                isTextMapIndicator = true;
+                isIconicTagIndicator = true;
+                myTestState = TestType.TextMapWithIconTag;
+                break;
+
+            case TestType.TextMapWithTextTag:
+                HUDMap.SetActive(true);
+                onObjectIndicatorState = true;
+                isTextMapIndicator = true;
+                isTextTagIndicator = true;
+                myTestState = TestType.TextMapWithTextTag;
                 break;
 
             default:
@@ -323,6 +358,12 @@ public class AppManager : MonoBehaviour
             HUDMap.SetActive(false);
 
             onObjectIndicatorState = false;
+
+            isIconicMapIndicator = false;
+            isIconicTagIndicator = false;
+            isTextMapIndicator = false;
+            isTextTagIndicator = false;
+
             playerIndicatorOnMap.SetActive(true);
         }
     }

@@ -20,9 +20,12 @@ public class MusicPlayer : MonoBehaviour
     public AudioClip audioClip;
 
     public GameObject mapIndicator;
-    private Transform loudnessIndicator;
+    private Transform mapIconicIndicator;
+    private Transform mapTextIndicator;
 
-    public GameObject soundIndicatorOnTag;
+    public GameObject tagIndicator;
+    private Transform tagIconicIndicator;
+    private Transform tagTextIndicator;
 
     public float minIndicatorScale = 0.2f;
     public float maxIndicatorScale = 3.0f;
@@ -34,6 +37,7 @@ public class MusicPlayer : MonoBehaviour
     public bool isLoop = false;
 
     public Sprite indicatorIcon = null;
+    public string indicatorText = "";
 
 
     void Awake()
@@ -46,19 +50,46 @@ public class MusicPlayer : MonoBehaviour
     {
         if (mapIndicator)
         {
-            loudnessIndicator = mapIndicator.transform.Find("Iconic Loudness Indicator");
+            mapIconicIndicator = mapIndicator.transform.Find("Iconic Loudness Indicator");
+            mapTextIndicator = mapIndicator.transform.Find("Text Loudness Indicator");
 
             if (indicatorIcon)
             {
-                loudnessIndicator.GetComponent<SpriteRenderer>().sprite = indicatorIcon;
+                mapIconicIndicator.GetComponent<SpriteRenderer>().sprite = indicatorIcon;
+
+                mapIconicIndicator.gameObject.SetActive(false);
+            }
+
+            if (indicatorText != "")
+            {
+                mapTextIndicator.GetComponent<TextMesh>().text = indicatorText;
+
+                mapTextIndicator.gameObject.SetActive(false);
             }
 
             mapIndicator.SetActive(false);
         }
 
-        if (soundIndicatorOnTag)
+        if (tagIndicator)
         {
-            soundIndicatorOnTag.SetActive(false);
+            tagIconicIndicator = tagIndicator.transform.Find("Iconic Indicator On Tag");
+            tagTextIndicator = tagIndicator.transform.Find("Text Indicator On Tag");
+
+            if (indicatorIcon)
+            {
+                tagIconicIndicator.GetComponent<SpriteRenderer>().sprite = indicatorIcon;
+
+                tagIconicIndicator.gameObject.SetActive(false);
+            }
+
+            if (indicatorText != "")
+            {
+                tagTextIndicator.GetComponent<TextMesh>().text = indicatorText;
+
+                tagTextIndicator.gameObject.SetActive(false);
+            }
+
+            tagIndicator.SetActive(false);
         }
 
         if (isAutoPlay)
@@ -92,28 +123,59 @@ public class MusicPlayer : MonoBehaviour
             if (mapIndicator)
             {
                 mapIndicator.SetActive(true);
+
+                if (AppManager.instance.isIconicMapIndicator)
+                {
+                    mapIconicIndicator.gameObject.SetActive(true);
+                    mapTextIndicator.gameObject.SetActive(false);
+                }
+                else if (AppManager.instance.isTextMapIndicator)
+                {
+                    mapTextIndicator.gameObject.SetActive(true);
+                    mapIconicIndicator.gameObject.SetActive(false);
+                }
             }
 
-            if (soundIndicatorOnTag && AppManager.instance.onObjectIndicatorState)
+            if (tagIndicator && AppManager.instance.onObjectIndicatorState)
             {
-                soundIndicatorOnTag.SetActive(true);
+                tagIndicator.SetActive(true);
+
+                if (AppManager.instance.isIconicTagIndicator)
+                {
+                    tagIconicIndicator.gameObject.SetActive(true);
+                    tagTextIndicator.gameObject.SetActive(false);
+                }
+                else if (AppManager.instance.isTextTagIndicator)
+                {
+                    tagTextIndicator.gameObject.SetActive(true);
+                    tagIconicIndicator.gameObject.SetActive(false);
+                }
             }
 
-            if (soundIndicatorOnTag && !AppManager.instance.onObjectIndicatorState)
+            if (tagIndicator && !AppManager.instance.onObjectIndicatorState)
             {
-                soundIndicatorOnTag.SetActive(false);
+                tagIconicIndicator.gameObject.SetActive(false);
+                tagTextIndicator.gameObject.SetActive(false);
+
+                tagIndicator.SetActive(false);
             }
         }
         else
         {
             if (mapIndicator)
             {
+                mapIconicIndicator.gameObject.SetActive(false);
+                mapTextIndicator.gameObject.SetActive(false);
+
                 mapIndicator.SetActive(false);
             }
 
-            if (soundIndicatorOnTag)
+            if (tagIndicator)
             {
-                soundIndicatorOnTag.SetActive(false);
+                tagIconicIndicator.gameObject.SetActive(false);
+                tagTextIndicator.gameObject.SetActive(false);
+
+                tagIndicator.SetActive(false);
             }
         }
 
@@ -140,14 +202,19 @@ public class MusicPlayer : MonoBehaviour
 
         float TagScale = 0.35f;
 
-        if (mapIndicator && mapIndicator.activeSelf)
+        if (AppManager.instance.isTextTagIndicator)
         {
-            loudnessIndicator.localScale = Vector3.Lerp(new Vector3(tarScale, tarScale, loudnessIndicator.localScale.z), loudnessIndicator.localScale, scaleStep);
+            TagScale = 0.25f;
         }
 
-        if (soundIndicatorOnTag && soundIndicatorOnTag.activeSelf)
+        if (mapIndicator && mapIndicator.activeSelf)
         {
-            soundIndicatorOnTag.transform.localScale = Vector3.Lerp(new Vector3(tarScale * TagScale, soundIndicatorOnTag.transform.localScale.y, tarScale * TagScale), soundIndicatorOnTag.transform.localScale, scaleStep);
+            mapIndicator.transform.localScale = Vector3.Lerp(new Vector3(tarScale, mapIndicator.transform.localScale.y, tarScale), mapIndicator.transform.localScale, scaleStep);
+        }
+
+        if (tagIndicator && tagIndicator.activeSelf)
+        {
+            tagIndicator.transform.localScale = Vector3.Lerp(new Vector3(tarScale * TagScale, tarScale * TagScale, tagIndicator.transform.localScale.z), tagIndicator.transform.localScale, scaleStep);
         }
     }
 }
