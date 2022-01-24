@@ -147,7 +147,7 @@ public class AppManager : MonoBehaviour
 
         if (ConfigManager.instance.useMuteBackgroundMusicStr != null)
         {
-            isBackgroundMusicMuted = !bool.Parse(ConfigManager.instance.useMuteBackgroundMusicStr);
+            isBackgroundMusicMuted = bool.Parse(ConfigManager.instance.useMuteBackgroundMusicStr);
         }
 
         HUDMap = GameObject.Find("HUDMiniMap");

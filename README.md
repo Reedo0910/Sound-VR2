@@ -1,5 +1,9 @@
 # VR Sound Mapping - Phase 2
 
+## Known Bug
+
+- Same audio may play from the same other Teddy/Radio
+
 ## Task List
 
 1. [long] (Radio 1 of 3) Find out the waterfall sound (0-2)
