@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 using System;
+using System.Threading;
 
 public class AppManager : MonoBehaviour
 {
@@ -278,6 +279,11 @@ public class AppManager : MonoBehaviour
 
     private void TaskStarter()
     {
+        if (taskCoundownCoroutine != null)
+        {
+            StopCoroutine(taskCoundownCoroutine);
+        }
+
         // All the audio clips that play in this quest 
         List<string> playingClips = new List<string>();
 
@@ -289,27 +295,36 @@ public class AppManager : MonoBehaviour
 
             List<string> newOtherSoundClips = new List<string>(currentQuest.otherSoundClips);
 
-            for (int i = 0; i < randomPick; i++)
+            newOtherSoundClips.Shuffle();
+
+            int randomPickCount = 0;
+
+            for (int i = 0; i < newOtherSoundClips.Count; i++)
             {
-                string otherAudioClipTitle = newOtherSoundClips[UnityEngine.Random.Range(0, newOtherSoundClips.Count)];
-
-                newOtherSoundClips.Remove(otherAudioClipTitle);
-
-                bool hasSameSoundSource = false;
-                for (int j = 0; j < playingClips.Count; j++)
+                if (randomPickCount < randomPick)
                 {
-                    if (PositionCheck(GetGameObjectbySoundClipTitle(playingClips[j]), GetGameObjectbySoundClipTitle(otherAudioClipTitle)))
+                    string otherAudioClipTitle = newOtherSoundClips[i];
+
+                    bool hasSameSoundSource = false;
+
+                    for (int j = 0; j < playingClips.Count; j++)
                     {
-                        hasSameSoundSource = true;
-                        break;
+                        if (PositionCheck(GetGameObjectbySoundClipTitle(playingClips[j]), GetGameObjectbySoundClipTitle(otherAudioClipTitle)))
+                        {
+                            hasSameSoundSource = true;
+                            break;
+                        }
                     }
-                }
-                if (hasSameSoundSource)
-                {
-                    continue;
-                }
 
-                playingClips.Add(otherAudioClipTitle);
+                    if (hasSameSoundSource)
+                    {
+                        continue;
+                    }
+
+                    playingClips.Add(otherAudioClipTitle);
+
+                    randomPickCount++;
+                }
             }
         }
 
@@ -331,11 +346,6 @@ public class AppManager : MonoBehaviour
         }
 
         MiniPromptController.instance.TaskStarted();
-
-        if (taskCoundownCoroutine != null)
-        {
-            StopCoroutine(taskCoundownCoroutine);
-        }
 
         suggestionCoroutine = SuggestionCountdown();
         StartCoroutine(suggestionCoroutine);
@@ -644,5 +654,31 @@ public class AppManager : MonoBehaviour
         //testStartDate = null;
         taskCoundownCoroutine = null;
         trackingCoroutine = null;
+    }
+}
+
+// Shuffle a List: https://stackoverflow.com/questions/273313/randomize-a-listt
+public static class ThreadSafeRandom
+{
+    [ThreadStatic] private static System.Random Local;
+
+    public static System.Random ThisThreadsRandom
+    {
+        get { return Local ?? (Local = new System.Random(unchecked(Environment.TickCount * 31 + Thread.CurrentThread.ManagedThreadId))); }
+    }
+}
+static class MyExtensions
+{
+    public static void Shuffle<T>(this IList<T> list)
+    {
+        int n = list.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = ThreadSafeRandom.ThisThreadsRandom.Next(n + 1);
+            T value = list[k];
+            list[k] = list[n];
+            list[n] = value;
+        }
     }
 }
