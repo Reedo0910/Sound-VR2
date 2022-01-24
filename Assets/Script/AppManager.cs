@@ -140,6 +140,16 @@ public class AppManager : MonoBehaviour
     {
         activeController = OVRInput.GetActiveController();
 
+        if (ConfigManager.instance.useLeftHandStr != null)
+        {
+            isRightHanded = !bool.Parse(ConfigManager.instance.useLeftHandStr);
+        }
+
+        if (ConfigManager.instance.useMuteBackgroundMusicStr != null)
+        {
+            isBackgroundMusicMuted = !bool.Parse(ConfigManager.instance.useMuteBackgroundMusicStr);
+        }
+
         HUDMap = GameObject.Find("HUDMiniMap");
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
         playerObj = GameObject.Find("OVRPlayerController");
