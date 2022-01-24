@@ -2,23 +2,31 @@
 
 ## Task List
 
-1. [long] (Radio 1 of 3) Find out the waterfall sound
+1. [long] (Radio 1 of 3) Find out the waterfall sound (0-2)
 
-2. [long] (Enviroment - barking dog) Point out the sounding object
+2. [long] (Enviroment - barking dog) Point out the sounding object (3)
 
-3. [long] (Telephone) Find out the ringing phone
+3. [long] (Telephone) Find out the ringing phone (4-6)
 
-4. [long] (Teddy 1 of 3) Find out the baby talk sound
+4. [long] (Teddy 1 of 3) Find out the baby talk sound (7-9)
 
-5. [short] (Enviroment - footstep) Point out the sounding object
+5. [short] (Teddy - footstep) Find out the sounding doll (10-12)
 
-6. [short] (Radio) Find out the gun shot sound
+6. [short] (Radio) Find out the gun shot sound (13-15)
 
-7. [short] (Radio) Find out the fire sound
+7. [short] (Radio) Find out the fire sound (16-18)
 
-8. [short] (Teddy) Find out the laughter sound
+8. [short] (Teddy) Find out the santa claus laughter (19-21)
 
-## Creadit
+## Credits
+
+### Code
+
+- Peer Play on Youtube: https://www.youtube.com/watch?v=0KqwmcQqg0s
+
+- UnityAudioVisualization [MIT] by nomand: https://github.com/nomand/UnityAudioVisualization
+
+### Audio
 
 - Localized Speech
 
@@ -44,8 +52,27 @@
 
     (Long 44s) Large Waterfall [Attribution 3.0] by Daniel Simion: https://soundbible.com/2201-Large-Waterfall.html
 
+    (Long 59s) Bird Song [Public Domain] by Jc Guan: https://soundbible.com/340-Bird-Song.html
+
+    (Long 19s) Frying Food by J Bravo on SoundBible [Attribution 3.0]: https://soundbible.com/2031-Frying-Food.html
+
 - Music (Surrounding Ambience)
 
     (Long 11s) Happy Birthday To You [Personal Use Only]: https://soundbible.com/421-Happy-Birthday-To-You.html
 
-    (Long 2m48s) Cowboy Theme [Personal Use Only] by Pavak: https://soundbible.com/1947-Cowboy-Theme.html
+    (Long 2m 48s) Cowboy Theme [Personal Use Only] by Pavak: https://soundbible.com/1947-Cowboy-Theme.html
+
+
+### Icon
+
+- Bird icons: <a href="https://www.flaticon.com/free-icons/bird" title="bird icons">Bird icons created by deemakdaksina - Flaticon</a>
+
+- Santa Claus: <a href="https://www.flaticon.com/free-icons/santa" title="santa icons">Santa icons created by apien - Flaticon</a>
+
+- Frying Pan Icon: <div>Icons made by <a href="https://www.flaticon.com/authors/octopocto" title="Octopocto">Octopocto</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+
+- Fire: <a href="https://www.flaticon.com/free-icons/fire" title="fire icons">Fire icons created by kosonicon - Flaticon</a>
+
+- Minimap gun: [CC0 License] from svg repo: https://www.svgrepo.com/svg/14148/submachine-gun
+
+- Other icons from font awesome [Creative Commons Attribution 4.0 International]: https://fontawesome.com/license

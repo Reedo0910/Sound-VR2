@@ -30,6 +30,7 @@ public class AppManager : MonoBehaviour
     class MySoundClip
     {
         public string title = "untitled";
+        public string name = "";
         public Sprite sprite;
         public GameObject tarObject;
         public AudioClip audioClip;
@@ -42,9 +43,36 @@ public class AppManager : MonoBehaviour
     [SerializeField]
     private List<MySoundClip> MySoundClipList;
 
+    [Serializable]
+    class MyQuestItem
+    {
+        public int index = 0;
+        public string questContent = "";
+        public string tarSoundClip;
+        public List<string> otherSoundClips;
+        public int randomPlayAmount = 0;
+    }
+
+    [SerializeField]
+    private List<MyQuestItem> MyQuestList;
+
+    [Serializable]
+    class MyTaskItem
+    {
+        public int index = 0;
+        public List<int> questList;
+    }
+
+    [SerializeField]
+    private List<MyTaskItem> MyTaskList;
+
     private List<int> objectRandomList = new List<int>();
 
     private List<GameObject> audioSourceList = new List<GameObject>();
+
+    private GameObject backgroundMusicPlayer = null;
+
+    public bool isBackgroundMusicMuted = false;
 
     public enum TestType
     {
@@ -55,11 +83,16 @@ public class AppManager : MonoBehaviour
         TextMapWithTextTag = 4
     };
 
+    [HideInInspector]
     public bool onObjectIndicatorState = false;
+    [HideInInspector]
     public bool isIconicTagIndicator = false;
+    [HideInInspector]
     public bool isTextTagIndicator = false;
 
+    [HideInInspector]
     public bool isIconicMapIndicator = false;
+    [HideInInspector]
     public bool isTextMapIndicator = false;
 
     public TestType myTestState = TestType.Off;
@@ -94,6 +127,7 @@ public class AppManager : MonoBehaviour
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
         playerObj = GameObject.Find("OVRPlayerController");
         playerIndicatorOnMap = GameObject.Find("Player on Map");
+        backgroundMusicPlayer = GameObject.Find("Speaker");
 
         SetTestState((int)myTestState);
         BindSoundSource();
@@ -147,6 +181,10 @@ public class AppManager : MonoBehaviour
                 StartATask();
             }
         }
+
+
+        // Background Music Control
+        backgroundMusicPlayer.GetComponent<AudioSource>().mute = isBackgroundMusicMuted;
     }
 
     private void LateUpdate()
@@ -250,7 +288,7 @@ public class AppManager : MonoBehaviour
             objMusicPlayer.isLoop = obj.isLoop;
             //objMusicPlayer.isAutoPlay = obj.isPlayOnWake;
             objMusicPlayer.indicatorIcon = obj.sprite;
-            objMusicPlayer.indicatorText = obj.title;
+            objMusicPlayer.indicatorText = obj.name;
 
             go.transform.SetParent(container);
 
