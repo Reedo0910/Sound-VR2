@@ -301,30 +301,32 @@ public class AppManager : MonoBehaviour
 
             for (int i = 0; i < newOtherSoundClips.Count; i++)
             {
-                if (randomPickCount < randomPick)
+                if (randomPickCount >= randomPick)
                 {
-                    string otherAudioClipTitle = newOtherSoundClips[i];
-
-                    bool hasSameSoundSource = false;
-
-                    for (int j = 0; j < playingClips.Count; j++)
-                    {
-                        if (PositionCheck(GetGameObjectbySoundClipTitle(playingClips[j]), GetGameObjectbySoundClipTitle(otherAudioClipTitle)))
-                        {
-                            hasSameSoundSource = true;
-                            break;
-                        }
-                    }
-
-                    if (hasSameSoundSource)
-                    {
-                        continue;
-                    }
-
-                    playingClips.Add(otherAudioClipTitle);
-
-                    randomPickCount++;
+                    break;
                 }
+
+                string otherAudioClipTitle = newOtherSoundClips[i];
+
+                bool hasSameSoundSource = false;
+
+                for (int j = 0; j < playingClips.Count; j++)
+                {
+                    if (PositionCheck(GetGameObjectbySoundClipTitle(playingClips[j]), GetGameObjectbySoundClipTitle(otherAudioClipTitle)))
+                    {
+                        hasSameSoundSource = true;
+                        break;
+                    }
+                }
+
+                if (hasSameSoundSource)
+                {
+                    continue;
+                }
+
+                playingClips.Add(otherAudioClipTitle);
+
+                randomPickCount++;
             }
         }
 
