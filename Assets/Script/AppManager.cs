@@ -23,7 +23,7 @@ public class AppManager : MonoBehaviour
     private bool isTaskStarted = false;
 
     public string currentPlayingObject = "";
-    private int currentPlayingObjectIndex = -1;
+    private int currentAssignedTaskIndex = -1;
 
 
     [Serializable]
@@ -56,6 +56,8 @@ public class AppManager : MonoBehaviour
     [SerializeField]
     private List<MyQuestItem> MyQuestList;
 
+    private MyQuestItem currentQuest = null;
+
     [Serializable]
     class MyTaskItem
     {
@@ -68,11 +70,24 @@ public class AppManager : MonoBehaviour
 
     private List<int> objectRandomList = new List<int>();
 
+    public string currentTaskContent = "";
+
     private List<GameObject> audioSourceList = new List<GameObject>();
+
+    private List<GameObject> currentPlayingList = new List<GameObject>();
 
     private GameObject backgroundMusicPlayer = null;
 
     public bool isBackgroundMusicMuted = false;
+
+    private float currentCountDownVal = 0f;
+    private float suggestionCountDownVal = 0f;
+
+    IEnumerator trackingCoroutine = null;
+    IEnumerator taskCoundownCoroutine = null;
+    IEnumerator suggestionCoroutine = null;
+
+    List<IEnumerator> autoPlayAudioCoroutines = new List<IEnumerator>();
 
     public enum TestType
     {
@@ -99,6 +114,8 @@ public class AppManager : MonoBehaviour
 
     [NonSerialized]
     public OVRInput.Controller activeController;
+
+    private bool isSkippable = false;
 
     void Awake()
     {
@@ -153,6 +170,11 @@ public class AppManager : MonoBehaviour
                 else if (OVRInput.GetDown(OVRInput.Button.One))
                 {
                     StartATask();
+
+                    if (isTaskStarted && isSkippable)
+                    {
+                        CompleteATask("");
+                    }
                 }
             }
             else
@@ -165,6 +187,11 @@ public class AppManager : MonoBehaviour
                 else if (OVRInput.GetDown(OVRInput.Button.Three))
                 {
                     StartATask();
+
+                    if (isTaskStarted && isSkippable)
+                    {
+                        CompleteATask("");
+                    }
                 }
 
             }
@@ -179,6 +206,11 @@ public class AppManager : MonoBehaviour
             else if (OVRInput.GetDown(OVRInput.Button.One))
             {
                 StartATask();
+
+                if (isTaskStarted && isSkippable)
+                {
+                    CompleteATask("");
+                }
             }
         }
 
@@ -207,59 +239,203 @@ public class AppManager : MonoBehaviour
         SetTestState(curState);
     }
 
-    //private void PreviousMethod()
-    //{
-    //    int curState = (int)myTestState;
-    //    if (curState <= 0)
-    //    {
-    //        curState = 4;
-    //    }
-    //    else
-    //    {
-    //        curState--;
-    //    }
-
-    //    SetTestState(curState);
-    //}
-
     private void StartATask()
     {
         if (!isTaskStarted)
         {
+            isTaskStarted = true;
+
+            isSkippable = false;
+
             if (objectRandomList.Count > 0)
             {
-                MiniPromptController.instance.ShowSuggestionText();
+                currentAssignedTaskIndex = objectRandomList[UnityEngine.Random.Range(0, objectRandomList.Count)];
+                objectRandomList.Remove(currentAssignedTaskIndex);
 
-                currentPlayingObjectIndex = objectRandomList[UnityEngine.Random.Range(0, objectRandomList.Count)];
-                objectRandomList.Remove(currentPlayingObjectIndex);
+                List<int> currentQuestList = MyTaskList[currentAssignedTaskIndex].questList;
+                int currentActiveQuestIndex = currentQuestList[UnityEngine.Random.Range(0, currentQuestList.Count)];
 
-                audioSourceList[currentPlayingObjectIndex].GetComponentInChildren<MusicPlayer>().StopPlaying();
-                audioSourceList[currentPlayingObjectIndex].GetComponentInChildren<MusicPlayer>().StartPlaying();
+                currentQuest = MyQuestList[currentActiveQuestIndex];
+                currentTaskContent = currentQuest.questContent;
 
-                currentPlayingObject = audioSourceList[currentPlayingObjectIndex].name;
+                MiniPromptController.instance.ShowTaskPrompt(currentTaskContent);
 
-                isTaskStarted = true;
+                taskCoundownCoroutine = StartCountdown();
+                StartCoroutine(taskCoundownCoroutine);
             }
         }
     }
 
-    public void CompleteATask(string name)
+    private void TaskStarter()
+    {
+        // All the audio clips that play in this quest 
+        List<string> playingClips = new List<string>();
+
+        playingClips.Add(currentQuest.tarSoundClip);
+
+        if (currentQuest.otherSoundClips.Count > 0)
+        {
+            int randomPick = currentQuest.randomPlayAmount > 0 ? currentQuest.randomPlayAmount : currentQuest.otherSoundClips.Count;
+
+            List<string> newOtherSoundClips = new List<string>(currentQuest.otherSoundClips);
+
+            for (int i = 0; i < randomPick; i++)
+            {
+                string otherAudioClipTitle = newOtherSoundClips[UnityEngine.Random.Range(0, newOtherSoundClips.Count)];
+                newOtherSoundClips.Remove(otherAudioClipTitle);
+
+                playingClips.Add(otherAudioClipTitle);
+            }
+        }
+
+        currentPlayingList.Clear();
+        autoPlayAudioCoroutines.Clear();
+
+        for (int i = 0; i < playingClips.Count; i++)
+        {
+            for (int j = 0; j < audioSourceList.Count; j++)
+            {
+                if (audioSourceList[j].name == "Source_" + playingClips[i])
+                {
+                    autoPlayAudioCoroutines.Add(PlayAudioClip(audioSourceList[j]));
+                    StartCoroutine(autoPlayAudioCoroutines[i]);
+
+                    break;
+                }
+            }
+        }
+
+        MiniPromptController.instance.TaskStarted();
+
+        if (taskCoundownCoroutine != null)
+        {
+            StopCoroutine(taskCoundownCoroutine);
+        }
+
+        suggestionCoroutine = SuggestionCountdown();
+        StartCoroutine(suggestionCoroutine);
+    }
+
+    public IEnumerator StartCountdown(float countdownVal = 7)
+    {
+        currentCountDownVal = countdownVal;
+        while (currentCountDownVal > 0)
+        {
+            if (currentCountDownVal <= 3)
+            {
+                MiniPromptController.instance.TaskStarting(currentCountDownVal);
+            }
+
+            yield return new WaitForSeconds(1.0f);
+            currentCountDownVal--;
+        }
+        TaskStarter();
+    }
+
+    public IEnumerator PlayAudioClip(GameObject player)
+    {
+        float generatorTimer = UnityEngine.Random.Range(0f, 5f);
+        yield return new WaitForSeconds(generatorTimer);
+
+        player.GetComponentInChildren<MusicPlayer>().StopPlaying();
+        player.GetComponentInChildren<MusicPlayer>().StartPlaying();
+
+        currentPlayingList.Add(player);
+        currentPlayingObject = player.name;
+    }
+
+    public IEnumerator SuggestionCountdown(float countdownVal = 10)
+    {
+        suggestionCountDownVal = countdownVal;
+        while (suggestionCountDownVal > 0)
+        {
+            yield return new WaitForSeconds(1.0f);
+            suggestionCountDownVal--;
+        }
+        EnableSuggestion();
+    }
+
+    private void EnableSuggestion()
+    {
+        MiniPromptController.instance.ShowSuggestionText();
+        isSkippable = true;
+    }
+
+    private void DisableSuggestion()
+    {
+        MiniPromptController.instance.HideSuggestionText();
+        isSkippable = false;
+    }
+
+    public void CompleteATask(string objectName)
     {
         if (isTaskStarted)
         {
-            if (name == currentPlayingObject)
+            string tarObjName = "";
+
+            if (GetGameObjectbySoundClipTitle(currentQuest.tarSoundClip))
+            {
+                tarObjName = GetGameObjectbySoundClipTitle(currentQuest.tarSoundClip).name;
+            }
+
+            if (objectName == tarObjName)
             {
                 startHapticFeedback();
             }
 
-            MiniPromptController.instance.HideSuggestionText();
+            MiniPromptController.instance.HideTaskPrompt();
 
-            audioSourceList[currentPlayingObjectIndex].GetComponentInChildren<MusicPlayer>().StopPlaying();
+            if (suggestionCoroutine != null)
+            {
+                StopCoroutine(suggestionCoroutine);
+            }
+
+            // Stop all autoplay Coroutine
+            for (int i = 0; i < autoPlayAudioCoroutines.Count; i++)
+            {
+                if (autoPlayAudioCoroutines[i] != null)
+                {
+                    StopCoroutine(autoPlayAudioCoroutines[i]);
+                }
+            }
+
+            DisableSuggestion();
+
+            for (int i = 0; i < currentPlayingList.Count; i++)
+            {
+                currentPlayingList[i].GetComponentInChildren<MusicPlayer>().StopPlaying();
+            }
+
+            currentPlayingList.Clear();
 
             currentPlayingObject = "";
+            currentQuest = null;
 
             isTaskStarted = false;
+
+            if (objectRandomList.Count == 0)
+            {
+                MiniPromptController.instance.TaskCompleted(true);
+                //ResetTestState();
+            }
+            else
+            {
+                StartATask();
+            }
         }
+    }
+
+    private GameObject GetGameObjectbySoundClipTitle(string title)
+    {
+        for (int i = 0; i < MySoundClipList.Count; i++)
+        {
+            if (MySoundClipList[i].title == title)
+            {
+                return MySoundClipList[i].tarObject;
+            }
+        }
+
+        return null;
     }
 
     public void startHapticFeedback()
@@ -278,7 +454,7 @@ public class AppManager : MonoBehaviour
             GameObject tar = obj.tarObject;
 
             GameObject go = Instantiate(soundSourcePrefab, tar.transform.position, Quaternion.identity);
-            go.name = "Source_" + tar.name;
+            go.name = "Source_" + obj.title;
             go.transform.localScale = obj.scale;
 
             go.transform.Find("Tag Conatiner").localPosition = new Vector3(0, obj.indicatorHeight, 0);
@@ -312,7 +488,7 @@ public class AppManager : MonoBehaviour
     private void GenerateRandomList()
     {
         objectRandomList.Clear();
-        for (int i = 0; i < audioSourceList.Count; i++)
+        for (int i = 0; i < MyTaskList.Count; i++)
         {
             objectRandomList.Add(i);
         }
@@ -404,5 +580,33 @@ public class AppManager : MonoBehaviour
 
             playerIndicatorOnMap.SetActive(true);
         }
+    }
+
+    public void ResetTestState()
+    {
+        DisableSuggestion();
+
+        GenerateRandomList();
+
+        StopAllCoroutines();
+
+        //userSelectIds.Clear();
+        //playingSourceIds.Clear();
+        //playingClipIds.Clear();
+        //playingClipNames.Clear();
+        //userSelectPositions.Clear();
+        //playingSourcePositions.Clear();
+        //selectingDurations.Clear();
+        //currentUserPositions.Clear();
+        //currentUserRotations.Clear();
+        //userPositionsRecord.Clear();
+        //userRotationsRecord.Clear();
+
+        //lastTimestamp = null;
+
+        //currentAttempt = 0;
+        //testStartDate = null;
+        taskCoundownCoroutine = null;
+        trackingCoroutine = null;
     }
 }

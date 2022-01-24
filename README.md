@@ -75,4 +75,6 @@
 
 - Minimap gun: [CC0 License] from svg repo: https://www.svgrepo.com/svg/14148/submachine-gun
 
+- Waterfall: <a href="https://www.flaticon.com/free-icons/river" title="river icons">River icons created by Freepik - Flaticon</a>
+
 - Other icons from font awesome [Creative Commons Attribution 4.0 International]: https://fontawesome.com/license

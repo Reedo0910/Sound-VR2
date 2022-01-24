@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,13 +12,26 @@ public class MiniPromptController : MonoBehaviour
     private GameObject promptTextObj = null;
     private Text promptText = null;
 
-    //[SerializeField]
-    //private string suggestionTextLeft = "If you cannot locate the sound, press X or Y button to skip";
-    //[SerializeField]
-    //private string suggestionTextRight = "If you cannot locate the sound, press A or B button to skip";
+    private GameObject suggestionBoxObj = null;
+    private GameObject suggestionTextObj = null;
+    private Text suggestionText = null;
+
+    float currentPanelFadedCountdownVal = 0f;
+
+    IEnumerator taskCompletedCoroutine = null;
+    IEnumerator conditionCompletedCoroutine = null;
 
     [SerializeField]
-    private string indicationText = "Please point out the sounding object";
+    private string suggestionTextLeft = "If you cannot locate the sound, press X to skip";
+    [SerializeField]
+    private string suggestionTextRight = "If you cannot locate the sound, press A to skip";
+
+    [SerializeField]
+    private string waitingText = "Please wait for the moderator to start a task...";
+    [SerializeField]
+    private string completingText = "Task Complete";
+    [SerializeField]
+    private string takeoffText = "Please kindly take off the VR headset.";
 
     void Awake()
     {
@@ -36,34 +50,103 @@ public class MiniPromptController : MonoBehaviour
     {
         promptBoxObj = GameObject.Find("MiniPromptPanel");
         promptTextObj = GameObject.Find("MiniPromptPanel/PromptText");
+      
         promptText = promptTextObj.GetComponent<Text>();
 
-        promptBoxObj.SetActive(false);
+        suggestionBoxObj = GameObject.Find("SuggestionPanel");
+        suggestionTextObj = GameObject.Find("SuggestionPanel/SuggestionText");
+        suggestionText = suggestionTextObj.GetComponent<Text>();
+
+        suggestionBoxObj.SetActive(false);
+
+        TaskHolding();
+        HideTaskPrompt();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TaskHolding()
     {
-        
+        suggestionBoxObj.SetActive(true);
+        suggestionText.text = waitingText;
+    }
+
+    public void TaskStarting(float countdown)
+    {
+        suggestionBoxObj.SetActive(true);
+        suggestionText.text = "Task starts in " + countdown + " s";
+    }
+
+    public void TaskStarted()
+    {
+        suggestionBoxObj.SetActive(false);
+    }
+
+    public void ShowTaskPrompt(string indicatorText)
+    {
+        promptBoxObj.SetActive(true);
+        promptText.text = "Task:\n" + indicatorText;
+
+        suggestionBoxObj.SetActive(false);
     }
 
     public void ShowSuggestionText()
     {
-        promptBoxObj.SetActive(true);
-        promptText.text = indicationText;
-        //if ((AppManager.instance.activeController == OVRInput.Controller.Touch && !AppManager.instance.isRightHanded) || AppManager.instance.activeController == OVRInput.Controller.LTouch)
-        //{
-        //    promptText.text = suggestionTextLeft;
-        //}
-        //else
-        //{
-        //    promptText.text = suggestionTextRight;
-        //}
+        suggestionBoxObj.SetActive(true);
+        if ((AppManager.instance.activeController == OVRInput.Controller.Touch && !AppManager.instance.isRightHanded) || AppManager.instance.activeController == OVRInput.Controller.LTouch)
+        {
+            suggestionText.text = suggestionTextLeft;
+        }
+        else
+        {
+            suggestionText.text = suggestionTextRight;
+        }
     }
 
     public void HideSuggestionText()
     {
+        suggestionBoxObj.SetActive(false);
+        suggestionText.text = "";
+    }
+
+    public void HideTaskPrompt()
+    {
         promptBoxObj.SetActive(false);
         promptText.text = "";
+    }
+
+    public void TaskCompleted(bool isTaskEnd = false)
+    {
+        suggestionText.text = completingText;
+        suggestionBoxObj.SetActive(true);
+        if (isTaskEnd)
+        {
+            taskCompletedCoroutine = PanelFadedCountdown(HeadsetTakeOff);
+        }
+        else
+        {
+            taskCompletedCoroutine = PanelFadedCountdown(TaskHolding);
+        }
+
+        StartCoroutine(taskCompletedCoroutine);
+    }
+
+    public void HeadsetTakeOff()
+    {
+        suggestionText.text = takeoffText;
+        suggestionBoxObj.SetActive(true);
+
+        conditionCompletedCoroutine = PanelFadedCountdown(TaskHolding, 15);
+
+        StartCoroutine(conditionCompletedCoroutine);
+    }
+
+    public IEnumerator PanelFadedCountdown(Action myMethod, float panelFadedCountdownVal = 5)
+    {
+        currentPanelFadedCountdownVal = panelFadedCountdownVal;
+        while (currentPanelFadedCountdownVal > 0)
+        {
+            yield return new WaitForSeconds(1.0f);
+            currentPanelFadedCountdownVal--;
+        }
+        myMethod();
     }
 }
