@@ -292,7 +292,22 @@ public class AppManager : MonoBehaviour
             for (int i = 0; i < randomPick; i++)
             {
                 string otherAudioClipTitle = newOtherSoundClips[UnityEngine.Random.Range(0, newOtherSoundClips.Count)];
+
                 newOtherSoundClips.Remove(otherAudioClipTitle);
+
+                bool hasSameSoundSource = false;
+                for (int j = 0; j < playingClips.Count; j++)
+                {
+                    if (PositionCheck(GetGameObjectbySoundClipTitle(playingClips[j]), GetGameObjectbySoundClipTitle(otherAudioClipTitle)))
+                    {
+                        hasSameSoundSource = true;
+                        break;
+                    }
+                }
+                if (hasSameSoundSource)
+                {
+                    continue;
+                }
 
                 playingClips.Add(otherAudioClipTitle);
             }
@@ -433,6 +448,17 @@ public class AppManager : MonoBehaviour
                 StartATask();
             }
         }
+    }
+
+    private bool PositionCheck(GameObject firstObject, GameObject secondObject)
+    {
+        if (firstObject != null && secondObject != null)
+        {
+            return firstObject.transform.localPosition.x == secondObject.transform.localPosition.x
+            && firstObject.transform.localPosition.y == secondObject.transform.localPosition.y
+            && firstObject.transform.localPosition.z == secondObject.transform.localPosition.z;
+        }
+        return false;
     }
 
     private GameObject GetGameObjectbySoundClipTitle(string title)
