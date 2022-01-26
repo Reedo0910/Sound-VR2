@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 namespace BestHTTP.SocketIO3.Events
 {
+    [PlatformSupport.IL2CPP.Preserve]
     public sealed class ConnectResponse
     {
-        public string sid;
+        [PlatformSupport.IL2CPP.Preserve] public string sid;
     }
 
     public struct CallbackDescriptor

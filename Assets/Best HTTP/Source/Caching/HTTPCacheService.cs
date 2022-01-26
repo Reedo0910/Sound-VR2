@@ -47,10 +47,14 @@ namespace BestHTTP.Caching
 
                 try
                 {
+#if UNITY_WEBGL && !UNITY_EDITOR
+                    // Explicitly disable cahing under WebGL
+                    isSupported = false;
+#else
                     // If DirectoryExists throws an exception we will set IsSupprted to false
-
                     HTTPManager.IOService.DirectoryExists(HTTPManager.GetRootCacheFolder());
                     isSupported = true;
+#endif
                 }
                 catch
                 {
@@ -91,14 +95,14 @@ namespace BestHTTP.Caching
         /// </summary>
         private static UInt64 NextNameIDX;
 
-        #endregion
+#endregion
 
         static HTTPCacheService()
         {
             NextNameIDX = 0x0001;
         }
 
-        #region Common Functions
+#region Common Functions
 
         internal static void CheckSetup()
         {
@@ -270,9 +274,9 @@ namespace BestHTTP.Caching
             info.SetUpRevalidationHeaders(request);
         }
 
-        #endregion
+#endregion
 
-        #region Get Functions
+#region Get Functions
 
         public static HTTPCacheFileInfo GetEntity(Uri uri)
         {
@@ -318,9 +322,9 @@ namespace BestHTTP.Caching
             }
         }
 
-        #endregion
+#endregion
 
-        #region Storing
+#region Storing
 
         /// <summary>
         /// Checks if the given response can be cached. http://www.w3.org/Protocols/rfc2616/rfc2616-sec13.html#sec13.4
@@ -533,9 +537,9 @@ namespace BestHTTP.Caching
             }
         }
 
-        #endregion
+#endregion
 
-        #region Public Maintenance Functions
+#region Public Maintenance Functions
 
         /// <summary>
         /// Deletes all cache entity. Non blocking.
@@ -730,9 +734,9 @@ namespace BestHTTP.Caching
             return size;
         }
 
-        #endregion
+#endregion
 
-        #region Cache Library Management
+#region Cache Library Management
 
         private static void LoadLibrary()
         {
@@ -908,7 +912,7 @@ namespace BestHTTP.Caching
             }
         }
 
-        #endregion
+#endregion
     }
 }
 

@@ -193,7 +193,8 @@ namespace BestHTTP.SocketIO3.Parsers
 
                 case SocketIOEventTypes.Connect:
                     // No Data | Object
-                    args = ReadParameters(socket, subscription, new System.IO.StringReader(payload));
+                    using (var strReader = new System.IO.StringReader(payload))
+                        args = ReadParameters(socket, subscription, strReader);
                     break;
 
                 case SocketIOEventTypes.Disconnect:
@@ -205,7 +206,8 @@ namespace BestHTTP.SocketIO3.Parsers
                     switch (payload[0])
                     {
                         case '{':
-                            args = ReadParameters(socket, subscription, new System.IO.StringReader(payload));
+                            using (var strReader = new System.IO.StringReader(payload))
+                                args = ReadParameters(socket, subscription, strReader);
                             break;
 
                         default:
@@ -226,8 +228,10 @@ namespace BestHTTP.SocketIO3.Parsers
                 default:
                     // Array
 
-                    var reader = new System.IO.StringReader(payload);
-                    var array = JSON.LitJson.JsonMapper.ToObject<List<object>>(new JSON.LitJson.JsonReader(reader));
+                    List<object> array = null;
+                    using (var reader = new System.IO.StringReader(payload))
+                        array = JSON.LitJson.JsonMapper.ToObject<List<object>>(new JSON.LitJson.JsonReader(reader));
+
                     if (array.Count > 0)
                     {
                         eventName = array[0].ToString();

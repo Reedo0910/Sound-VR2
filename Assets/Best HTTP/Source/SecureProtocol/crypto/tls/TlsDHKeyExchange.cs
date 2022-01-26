@@ -75,7 +75,7 @@ namespace BestHTTP.SecureProtocol.Org.BouncyCastle.Crypto.Tls
             if (mKeyExchange == KeyExchangeAlgorithm.DH_anon)
                 throw new TlsFatalAlert(AlertDescription.unexpected_message);
             if (serverCertificate.IsEmpty)
-                throw new TlsFatalAlert(AlertDescription.bad_certificate);
+                throw new TlsFatalAlert(AlertDescription.decode_error);
 
             X509CertificateStructure x509Cert = serverCertificate.GetCertificateAt(0);
 

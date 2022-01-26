@@ -2,6 +2,9 @@
 #pragma warning disable
 using System;
 using System.Collections;
+#if !PORTABLE || NETFX_CORE || DOTNET
+using System.Net.Sockets;
+#endif
 using System.IO;
 using System.Text;
 
@@ -2385,6 +2388,17 @@ namespace BestHTTP.SecureProtocol.Org.BouncyCastle.Crypto.Tls
             }
             return v;
         }
+
+#if !PORTABLE || NETFX_CORE || DOTNET
+        public static bool IsTimeout(SocketException e)
+        {
+#if NET_1_1
+            return 10060 == e.ErrorCode;
+#else
+            return SocketError.TimedOut == e.SocketErrorCode;
+#endif
+        }
+#endif
     }
 }
 #pragma warning restore

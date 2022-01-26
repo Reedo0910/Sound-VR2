@@ -68,8 +68,8 @@ namespace BestHTTP
 
 #if NETFX_CORE
             IOService = new PlatformSupport.FileSystem.NETFXCOREIOService();
-#elif UNITY_WEBGL && !UNITY_EDITOR
-            IOService = new PlatformSupport.FileSystem.WebGLIOService();
+//#elif UNITY_WEBGL && !UNITY_EDITOR
+//            IOService = new PlatformSupport.FileSystem.WebGLIOService();
 #else
             IOService = new PlatformSupport.FileSystem.DefaultIOService();
 #endif
@@ -269,12 +269,13 @@ namespace BestHTTP
         /// <summary>
         /// User-agent string that will be sent with each requests.
         /// </summary>
-        public static string UserAgent = "BestHTTP/2 v2.5.2";
+        public static string UserAgent = "BestHTTP/2 v2.5.4";
 
         /// <summary>
         /// It's true if the application is quitting and the plugin is shutting down itself.
         /// </summary>
-        public static bool IsQuitting { get; private set; }
+        public static bool IsQuitting { get { return _isQuitting; } private set { _isQuitting = value; } }
+        private static volatile bool _isQuitting;
 #endregion
 
 #region Manager variables
@@ -393,6 +394,7 @@ namespace BestHTTP
 #endif
         }
 
+#if UNITY_EDITOR
 #if UNITY_2019_3_OR_NEWER
         [UnityEngine.RuntimeInitializeOnLoadMethod(UnityEngine.RuntimeInitializeLoadType.SubsystemRegistration)]
 #endif
@@ -401,6 +403,7 @@ namespace BestHTTP
             IsSetupCalled = false;
             HTTPManager.Logger.Information("HTTPManager", "Reset called!");
         }
+#endif
 
 #endregion
 

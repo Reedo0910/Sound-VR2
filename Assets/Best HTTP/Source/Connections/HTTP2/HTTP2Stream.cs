@@ -231,8 +231,7 @@ namespace BestHTTP.Connections.HTTP2
                 RequestEventHelper.EnqueueRequestEvent(new RequestEventInfo(this.AssignedRequest, RequestEvents.Resend));
             }
 
-            // After receiving a RST_STREAM on a stream, the receiver MUST NOT send additional frames for that stream, with the exception of PRIORITY.
-            this.outgoing.Clear();
+            this.Removed();
         }
 
         private void ProcessIncomingFrames(List<HTTP2FrameHeaderAndPayload> outgoingFrames)
@@ -621,7 +620,12 @@ namespace BestHTTP.Connections.HTTP2
                 this.uploadStreamInfo = new HTTPRequest.UploadStreamInfo();
             }
 
+            // After receiving a RST_STREAM on a stream, the receiver MUST NOT send additional frames for that stream, with the exception of PRIORITY.
             this.outgoing.Clear();
+
+            // https://github.com/Benedicht/BestHTTP-Issues/issues/77
+            // Unsubscribe from OnSettingChangedEvent to remove reference to this instance.
+            this.settings.RemoteSettings.OnSettingChangedEvent -= OnRemoteSettingChanged;
 
             HTTPManager.Logger.Information("HTTP2Stream", "Stream removed: " + this.Id.ToString(), this.Context, this.AssignedRequest.Context, this.parent.Context);
         }

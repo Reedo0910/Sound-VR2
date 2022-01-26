@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 
 using BestHTTP.SecureProtocol.Org.BouncyCastle.Crypto.Prng;
+using BestHTTP.SecureProtocol.Org.BouncyCastle.Crypto.Utilities;
 using BestHTTP.SecureProtocol.Org.BouncyCastle.Security;
 using BestHTTP.SecureProtocol.Org.BouncyCastle.Utilities;
 
@@ -30,6 +31,25 @@ namespace BestHTTP.SecureProtocol.Org.BouncyCastle.Crypto.Tls
         }
 #endif
 
+        private static IRandomGenerator CreateNonceRandom(SecureRandom secureRandom, int connectionEnd)
+        {
+            byte[] additionalSeedMaterial = new byte[16];
+            Pack.UInt64_To_BE((ulong)NextCounterValue(), additionalSeedMaterial, 0);
+            Pack.UInt64_To_BE((ulong)Times.NanoTime(), additionalSeedMaterial, 8);
+            additionalSeedMaterial[0] &= 0x7F;
+            additionalSeedMaterial[0] |= (byte)(connectionEnd << 7);
+
+            IDigest digest = TlsUtilities.CreateHash(HashAlgorithm.sha256);
+
+            byte[] seed = new byte[digest.GetDigestSize()];
+            secureRandom.NextBytes(seed);
+
+            IRandomGenerator nonceRandom = new DigestRandomGenerator(digest);
+            nonceRandom.AddSeedMaterial(additionalSeedMaterial);
+            nonceRandom.AddSeedMaterial(seed);
+            return nonceRandom;
+        }
+
         private readonly IRandomGenerator mNonceRandom;
         private readonly SecureRandom mSecureRandom;
         private readonly SecurityParameters mSecurityParameters;
@@ -41,17 +61,9 @@ namespace BestHTTP.SecureProtocol.Org.BouncyCastle.Crypto.Tls
 
         internal AbstractTlsContext(SecureRandom secureRandom, SecurityParameters securityParameters)
         {
-            IDigest d = TlsUtilities.CreateHash(HashAlgorithm.sha256);
-            byte[] seed = new byte[d.GetDigestSize()];
-            secureRandom.NextBytes(seed);
-
-            this.mNonceRandom = new DigestRandomGenerator(d);
-            mNonceRandom.AddSeedMaterial(NextCounterValue());
-            mNonceRandom.AddSeedMaterial(Times.NanoTime());
-            mNonceRandom.AddSeedMaterial(seed);
-
             this.mSecureRandom = secureRandom;
             this.mSecurityParameters = securityParameters;
+            this.mNonceRandom = CreateNonceRandom(secureRandom, securityParameters.Entity);
         }
 
         public virtual IRandomGenerator NonceRandomGenerator

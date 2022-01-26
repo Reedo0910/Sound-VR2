@@ -90,6 +90,16 @@ namespace BestHTTP.Connections
                             goto default;
                         }
 
+                    case 407:
+                        {
+                            if (request.Proxy == null)
+                                goto default;
+
+                            resendRequest = request.Proxy.SetupRequest(request);
+
+                            goto default;
+                        }
+
                     // Redirected
                     case 301: // http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.2
                     case 302: // http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3.3
@@ -330,6 +340,17 @@ namespace BestHTTP.Connections
             if (result == null)
             {
                 var baseURL = request.CurrentUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped);
+
+                if (!location.StartsWith("/"))
+                {
+                    var segments = request.CurrentUri.Segments;
+                    segments[segments.Length - 1] = location;
+
+                    location = String.Join(string.Empty, segments);
+                    if (location.StartsWith("//"))
+                        location = location.Substring(1);
+                }
+                
                 bool endsWithSlash = baseURL[baseURL.Length - 1] == '/';
                 bool startsWithSlash = location[0] == '/';
                 if (endsWithSlash && startsWithSlash)

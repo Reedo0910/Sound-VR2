@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading;
 
@@ -13,6 +12,8 @@ namespace BestHTTP.PlatformSupport.Memory
     [BestHTTP.PlatformSupport.IL2CPP.Il2CppEagerStaticClassConstructionAttribute]
     public struct BufferSegment
     {
+        private const int ToStringMaxDumpLength = 128;
+
         public static readonly BufferSegment Empty = new BufferSegment(null, 0, 0);
 
         public readonly byte[] Data;
@@ -83,9 +84,14 @@ namespace BestHTTP.PlatformSupport.Memory
 
             if (this.Count > 0)
             {
-                sb.AppendFormat("{0:X2}", this.Data[this.Offset]);
-                for (int i = 1; i < this.Count; ++i)
-                    sb.AppendFormat(", {0:X2}", this.Data[this.Offset + i]);
+                if (this.Count <= ToStringMaxDumpLength)
+                {
+                    sb.AppendFormat("{0:X2}", this.Data[this.Offset]);
+                    for (int i = 1; i < this.Count; ++i)
+                        sb.AppendFormat(", {0:X2}", this.Data[this.Offset + i]);
+                }
+                else
+                    sb.Append("...");
             }
 
             sb.Append("]]");
@@ -585,7 +591,19 @@ namespace BestHTTP.PlatformSupport.Memory
 #endif
         private static BufferDesc FindFreeBuffer(long size, bool canBeLarger)
         {
-            rwLock.EnterUpgradeableReadLock();
+            // Previously it was an upgradable read lock, and later a write lock around store.buffers.RemoveAt.
+            // However, checking store.buffers.Count in the if statement, and then get the last buffer and finally write lock the RemoveAt call
+            //  has plenty of time for race conditions.
+            //  Another thread could change store.buffers after checking count and getting the last element and before the write lock,
+            //  so in theory we could return with an element and remove another one from the buffers list.
+            //  A new FindFreeBuffer call could return it again causing malformed data and/or releasing it could duplicate it in the store.
+            // I tried to reproduce both issues (malformed data, duble entries) with a test where creating growin number of threads getting buffers writing to them, check the buffers and finally release them
+            //  would fail _only_ if i used a plain Enter/Exit ReadLock pair, or no locking at all.
+            // But, because there's quite a few different platforms and unity's implementation can be different too, switching from an upgradable lock to a more stricter write lock seems safer.
+            //
+            // An interesting read can be found here: https://stackoverflow.com/questions/21411018/readerwriterlockslim-enterupgradeablereadlock-always-a-deadlock
+
+            rwLock.EnterWriteLock();
             try
             {
                 for (int i = 0; i < FreeBuffers.Count; ++i)
@@ -599,24 +617,15 @@ namespace BestHTTP.PlatformSupport.Memory
                         //  2.) Old, non-used buffers will age. Getting a buffer and putting it back will not keep buffers fresh.
 
                         BufferDesc lastFree = store.buffers[store.buffers.Count - 1];
-
-                        rwLock.EnterWriteLock();
-                        try
-                        {
-                            store.buffers.RemoveAt(store.buffers.Count - 1);
-                        }
-                        finally
-                        {
-                            rwLock.ExitWriteLock();
-                        }
-
+                        store.buffers.RemoveAt(store.buffers.Count - 1);
+                        
                         return lastFree;
                     }
                 }
             }
             finally
             {
-                rwLock.ExitUpgradeableReadLock();
+                rwLock.ExitWriteLock();
             }
 
             return BufferDesc.Empty;

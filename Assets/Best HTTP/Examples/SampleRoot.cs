@@ -12,7 +12,7 @@ namespace BestHTTP.Examples
     {
 #pragma warning disable 0649
         [Header("Common Properties")]
-        public string BaseURL = "https://besthttpdemosite.azurewebsites.net";
+        public string BaseURL = "https://besthttpwebgldemo.azurewebsites.net";
 
         [Header("References")]
 

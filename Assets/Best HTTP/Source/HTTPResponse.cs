@@ -226,7 +226,7 @@ namespace BestHTTP
             this.Context.Add("IsFromCache", isFromCache);
         }
 
-        public virtual bool Receive(int forceReadRawContentLength = -1, bool readPayloadData = true, bool sendUpgradedEvent = true)
+        public virtual bool Receive(long forceReadRawContentLength = -1, bool readPayloadData = true, bool sendUpgradedEvent = true)
         {
             if (this.baseRequest.IsCancellationRequested)
                 return false;
@@ -324,10 +324,13 @@ namespace BestHTTP
             if (!readPayloadData)
                 return true;
 
+            if (this.StatusCode == 200 && this.IsProxyResponse)
+                return true;
+
             return ReadPayload(forceReadRawContentLength);
         }
 
-        protected bool ReadPayload(int forceReadRawContentLength)
+        protected bool ReadPayload(long forceReadRawContentLength)
         {
             // Reading from an already unpacked stream (eq. From a file cache or all responses under webgl)
             if (forceReadRawContentLength != -1)
@@ -1205,26 +1208,24 @@ namespace BestHTTP
             GC.SuppressFinalize(this);
         }
 
-        ~HTTPResponse()
-        {
-            Dispose(false);
-        }
-
         protected virtual void Dispose(bool disposing)
         {
-            // Release resources in case we are using ReadOnlyBufferedStream, it will not close its inner stream.
-            // Otherwise, closing the (inner) Stream is the connection's responsibility
-            if (Stream != null && Stream is ReadOnlyBufferedStream)
-                (Stream as IDisposable).Dispose();
-            Stream = null;
+            if (disposing)
+            {
+                // Release resources in case we are using ReadOnlyBufferedStream, it will not close its inner stream.
+                // Otherwise, closing the (inner) Stream is the connection's responsibility
+                if (Stream != null && Stream is ReadOnlyBufferedStream)
+                    (Stream as IDisposable).Dispose();
+                Stream = null;
 
 #if !BESTHTTP_DISABLE_CACHING
-            if (cacheStream != null)
-            {
-                cacheStream.Dispose();
-                cacheStream = null;
-            }
+                if (cacheStream != null)
+                {
+                    cacheStream.Dispose();
+                    cacheStream = null;
+                }
 #endif
+            }
         }
     }
 }

@@ -25,6 +25,11 @@ namespace BestHTTP.SecureProtocol.Org.BouncyCastle.Crypto.Tls
             this.mCloseHandle = closeHandle;
         }
 
+        public virtual int GetHandshakeTimeoutMillis()
+        {
+            return 0;
+        }
+
         public virtual bool RequiresExtendedMasterSecret()
         {
             return false;

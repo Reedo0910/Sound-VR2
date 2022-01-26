@@ -243,7 +243,7 @@ namespace BestHTTP.Extensions
         {
             streamClosed = true;
             expandable = false;
-            if (internalBuffer != null && this.releaseInternalBuffer)
+            if (disposing && internalBuffer != null && this.releaseInternalBuffer)
                 BufferPool.Release(internalBuffer);
             internalBuffer = null;
         }

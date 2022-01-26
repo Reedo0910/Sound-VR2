@@ -519,9 +519,14 @@ namespace BestHTTP.SignalRCore.Encoders
             {
                 reader.NextToken();
 
-                args = new object[subscription.callbacks[0].ParamTypes.Length];
-                for (int i = 0; i < subscription.callbacks[0].ParamTypes.Length; ++i)
-                    args[i] = reader.ReadValue(subscription.callbacks[0].ParamTypes[i]);
+                if (subscription.callbacks[0].ParamTypes != null)
+                {
+                    args = new object[subscription.callbacks[0].ParamTypes.Length];
+                    for (int i = 0; i < subscription.callbacks[0].ParamTypes.Length; ++i)
+                        args[i] = reader.ReadValue(subscription.callbacks[0].ParamTypes[i]);
+                }
+                else
+                    args = null;
 
                 reader.NextToken();
             }

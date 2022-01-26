@@ -128,7 +128,7 @@ namespace BestHTTP.Extensions
 
         protected override void Dispose(bool disposing)
         {
-            if (buf != null)
+            if (disposing && buf != null)
                 BufferPool.Release(buf);
 
             buf = null;

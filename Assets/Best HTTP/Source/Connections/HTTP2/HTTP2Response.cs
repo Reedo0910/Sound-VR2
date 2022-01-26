@@ -12,7 +12,7 @@ namespace BestHTTP.Connections.HTTP2
     public sealed class HTTP2Response : HTTPResponse
     {
         // For progress report
-        public int ExpectedContentLength { get; private set; }
+        public long ExpectedContentLength { get; private set; }
         public bool IsCompressed { get; private set; }
 
         public HTTP2Response(HTTPRequest request, bool isFromCache)
@@ -42,8 +42,8 @@ namespace BestHTTP.Connections.HTTP2
                     }
                     else if (base.baseRequest.OnDownloadProgress != null && header.Key.Equals("content-length", StringComparison.OrdinalIgnoreCase))
                     {
-                        int contentLength;
-                        if (int.TryParse(header.Value, out contentLength))
+                        long contentLength;
+                        if (long.TryParse(header.Value, out contentLength))
                             this.ExpectedContentLength = contentLength;
                         else
                             HTTPManager.Logger.Information("HTTP2Response", string.Format("AddHeaders - Can't parse Content-Length as an int: '{0}'", header.Value), this.baseRequest.Context, this.Context);

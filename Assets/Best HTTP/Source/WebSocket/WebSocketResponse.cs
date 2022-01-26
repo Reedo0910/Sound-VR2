@@ -64,7 +64,7 @@ namespace BestHTTP.WebSocket
         public TimeSpan PingFrequnecy { get; private set; }
 
         /// <summary>
-        /// Maximum size of a fragment's payload data. Its default value is 32767.
+        /// Maximum size of a fragment's payload data. Its default value is WebSocket.MaxFragmentSize's value.
         /// </summary>
         public uint MaxFragmentSize { get; set; }
 
@@ -128,7 +128,7 @@ namespace BestHTTP.WebSocket
             this.ConnectionKey = new HostConnectionKey(this.baseRequest.CurrentUri.Host, HostDefinition.GetKeyForRequest(this.baseRequest));
 
             closed = false;
-            MaxFragmentSize = UInt16.MaxValue / 2;
+            MaxFragmentSize = WebSocket.MaxFragmentSize;
         }
 
         internal void StartReceive()

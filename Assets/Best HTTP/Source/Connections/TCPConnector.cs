@@ -635,20 +635,8 @@ namespace BestHTTP.Connections
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
             Close();
         }
-
-        ~TCPConnector()
-        {
-            Dispose(false);
-        }
-
     }
 }
 #endif

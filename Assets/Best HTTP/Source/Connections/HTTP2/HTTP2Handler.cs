@@ -601,12 +601,6 @@ namespace BestHTTP.Connections.HTTP2
 
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
             HTTPRequest request = null;
             while (this.requestQueue.TryDequeue(out request))
             {
@@ -619,11 +613,6 @@ namespace BestHTTP.Connections.HTTP2
                 else
                     RequestEventHelper.EnqueueRequestEvent(new RequestEventInfo(request, RequestEvents.Resend));
             }
-        }
-
-        ~HTTP2Handler()
-        {
-            Dispose(false);
         }
     }
 }

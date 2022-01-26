@@ -37,6 +37,7 @@ namespace BestHTTP
         internal abstract void Connect(Stream stream, HTTPRequest request);
 
         internal abstract string GetRequestPath(Uri uri);
+        internal abstract bool SetupRequest(HTTPRequest request);
 
         internal bool UseProxyForAddress(Uri address)
         {
@@ -95,6 +96,47 @@ namespace BestHTTP
         internal override string GetRequestPath(Uri uri)
         {
             return this.SendWholeUri ? uri.OriginalString : uri.GetRequestPathAndQueryURL();
+        }
+
+        internal override bool SetupRequest(HTTPRequest request)
+        {
+            if (request == null || request.Response == null || !this.IsTransparent)
+                return false;
+
+            string authHeader = DigestStore.FindBest(request.Response.GetHeaderValues("proxy-authenticate"));
+            if (!string.IsNullOrEmpty(authHeader))
+            {
+                var digest = DigestStore.GetOrCreate(request.Proxy.Address);
+                digest.ParseChallange(authHeader);
+
+                if (request.Proxy.Credentials != null && digest.IsUriProtected(request.Proxy.Address) && (!request.HasHeader("Proxy-Authorization") || digest.Stale))
+                {
+                    switch (request.Proxy.Credentials.Type)
+                    {
+                        case AuthenticationTypes.Basic:
+                            // With Basic authentication we don't want to wait for a challenge, we will send the hash with the first request
+                            request.SetHeader("Proxy-Authorization", string.Concat("Basic ", Convert.ToBase64String(Encoding.UTF8.GetBytes(request.Proxy.Credentials.UserName + ":" + request.Proxy.Credentials.Password))));
+                            return true;
+
+                        case AuthenticationTypes.Unknown:
+                        case AuthenticationTypes.Digest:
+                            //var digest = DigestStore.Get(request.Proxy.Address);
+                            if (digest != null)
+                            {
+                                string authentication = digest.GenerateResponseHeader(request, request.Proxy.Credentials, true);
+                                if (!string.IsNullOrEmpty(authentication))
+                                {
+                                    request.SetHeader("Proxy-Authorization", authentication);
+                                    return true;
+                                }
+                            }
+
+                            break;
+                    }
+                }
+            }
+
+            return false;
         }
 
         internal override void Connect(Stream stream, HTTPRequest request)

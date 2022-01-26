@@ -701,7 +701,7 @@ namespace BestHTTP
 #endif
 
             this.Context = new LoggingContext(this);
-            this.Timing = new TimingCollector();
+            this.Timing = new TimingCollector(this);
         }
 
         #endregion

@@ -108,18 +108,21 @@ namespace BestHTTP.Extensions
 
         protected override void Dispose(bool disposing)
         {
-            for (int i = 0; i < Streams.Length; ++i)
-                if (Streams[i] != null)
-                {
-                    try
+            if (disposing)
+            {
+                for (int i = 0; i < Streams.Length; ++i)
+                    if (Streams[i] != null)
                     {
-                        Streams[i].Dispose();
+                        try
+                        {
+                            Streams[i].Dispose();
+                        }
+                        catch (Exception ex)
+                        {
+                            HTTPManager.Logger.Exception("StreamList", "Dispose", ex);
+                        }
                     }
-                    catch (Exception ex)
-                    {
-                        HTTPManager.Logger.Exception("StreamList", "Dispose", ex);
-                    }
-                }
+            }
         }
 
         public override long Position

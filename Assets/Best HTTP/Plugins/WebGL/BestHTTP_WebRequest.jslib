@@ -17,8 +17,8 @@ var Lib_BEST_HTTP_WebGL_HTTP_Bridge =
 
 	XHR_Create: function(method, url, user, passwd, withCredentials)
 	{
-		var _url = new URL(Pointer_stringify(url)); ///*encodeURI*/(Pointer_stringify(url)).replace(/\+/g, '%2B').replace(/%252[fF]/ig, '%2F');
-		var _method = Pointer_stringify(method);
+		var _url = new URL(UTF8ToString(url)); ///*encodeURI*/(UTF8ToString(url)).replace(/\+/g, '%2B').replace(/%252[fF]/ig, '%2F');
+		var _method = UTF8ToString(method);
 
 		if (wr.loglevel <= 1) /*information*/
 			console.log(wr.nextRequestId + ' XHR_Create - withCredentials: ' + withCredentials + ' method: ' + _method + ' url: ' + _url.toString());
@@ -27,8 +27,8 @@ var Lib_BEST_HTTP_WebGL_HTTP_Bridge =
 
 		if (user && passwd)
 		{
-			var u = Pointer_stringify(user);
-			var p = Pointer_stringify(passwd);
+			var u = UTF8ToString(user);
+			var p = UTF8ToString(passwd);
 
 			http.withCredentials = true;
 			http.open(_method, _url.toString(), /*async:*/ true , u, p);
@@ -54,8 +54,8 @@ var Lib_BEST_HTTP_WebGL_HTTP_Bridge =
 
 	XHR_SetRequestHeader: function (request, header, value)
 	{
-		var _header = Pointer_stringify(header);
-		var _value = Pointer_stringify(value);
+		var _header = UTF8ToString(header);
+		var _value = UTF8ToString(value);
 
 		if (wr.loglevel <= 1) /*information*/
 			console.log(request + ' XHR_SetRequestHeader ' + _header + ' ' + _value);
@@ -99,7 +99,7 @@ var Lib_BEST_HTTP_WebGL_HTTP_Bridge =
 				if (!!http.response)
 					responseLength = http.response.byteLength;
 
-				Runtime.dynCall('viiiii', onresponse, [request, http.status, 0, responseLength, 0]);
+				Module['dynCall_viiiii'](onresponse, request, http.status, 0, responseLength, 0);
 			}
 		};
 
@@ -113,7 +113,7 @@ var Lib_BEST_HTTP_WebGL_HTTP_Bridge =
 
 					stringToUTF8Array(err, HEAPU8, buffer, length);
 
-					Runtime.dynCall('vii', onerror, [request, buffer]);
+					Module['dynCall_vii'](onerror, request, buffer);
 
 					_free(buffer);
 				}
@@ -127,12 +127,12 @@ var Lib_BEST_HTTP_WebGL_HTTP_Bridge =
 
 		if (ontimeout)
 			http.ontimeout = function http_onerror(e) {
-				Runtime.dynCall('vi', ontimeout, [request]);
+				Module['dynCall_vi'](ontimeout, request);
 			};
 
 		if (onaborted)
 			http.onabort = function http_onerror(e) {
-				Runtime.dynCall('vi', onaborted, [request]);
+				Module['dynCall_vi'](onaborted, request);
 			};
 	},
 
@@ -150,7 +150,7 @@ var Lib_BEST_HTTP_WebGL_HTTP_Bridge =
 						console.log(request + ' XHR_SetProgressHandler - onProgress ' + e.loaded + ' ' + e.total);
 
 					if (e.lengthComputable)
-						Runtime.dynCall('viii', onprogress, [request, e.loaded, e.total]);
+						Module['dynCall_viii'](onprogress, request, e.loaded, e.total);
 				};
 
 			if (onuploadprogress)
@@ -159,7 +159,7 @@ var Lib_BEST_HTTP_WebGL_HTTP_Bridge =
 						console.log(request + ' XHR_SetProgressHandler - onUploadProgress ' + e.loaded + ' ' + e.total);
 
 					if (e.lengthComputable)
-						Runtime.dynCall('viii', onuploadprogress, [request, e.loaded, e.total]);
+						Module['dynCall_viii'](onuploadprogress, request, e.loaded, e.total);
 				}, true);
 		}
 	},
@@ -190,8 +190,12 @@ var Lib_BEST_HTTP_WebGL_HTTP_Bridge =
 
         var headers = ''
         var cookies = document.cookie.split(';');
-        for(var i = 0; i < cookies.length; ++i)
-            headers += "Set-Cookie:" + cookies[i] + "\r\n";
+        for(var i = 0; i < cookies.length; ++i) {
+            const cookie = cookies[i].trim();
+
+            if (cookie.length > 0)
+                headers += "Set-Cookie:" + cookie + "\r\n";
+        }
 
         var additionalHeaders = wr.requestInstances[request].getAllResponseHeaders().trim();
         if (additionalHeaders.length > 0) {
@@ -212,7 +216,7 @@ var Lib_BEST_HTTP_WebGL_HTTP_Bridge =
 		var buffer = _malloc(byteArray.length);
 		HEAPU8.set(byteArray, buffer);
 
-		Runtime.dynCall('viii', callback, [request, buffer, byteArray.length]);
+		Module['dynCall_viii'](callback, request, buffer, byteArray.length);
 
 		_free(buffer);
 	},
@@ -234,7 +238,7 @@ var Lib_BEST_HTTP_WebGL_HTTP_Bridge =
 		var buffer = _malloc(byteArray.length);
 		HEAPU8.set(byteArray, buffer);
 
-		Runtime.dynCall('viii', callback, [request, buffer, byteArray.length]);
+		Module['dynCall_viii'](callback, request, buffer, byteArray.length);
 
 		_free(buffer);
 	},

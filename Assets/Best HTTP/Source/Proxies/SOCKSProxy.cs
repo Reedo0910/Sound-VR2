@@ -63,6 +63,11 @@ namespace BestHTTP
             return uri.GetRequestPathAndQueryURL();
         }
 
+        internal override bool SetupRequest(HTTPRequest request)
+        {
+            return false;
+        }
+
         internal override void Connect(Stream stream, HTTPRequest request)
         {
             var buffer = BufferPool.Get(1024, true);

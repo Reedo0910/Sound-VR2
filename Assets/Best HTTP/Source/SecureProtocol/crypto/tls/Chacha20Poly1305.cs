@@ -165,7 +165,7 @@ namespace BestHTTP.SecureProtocol.Org.BouncyCastle.Crypto.Tls
 
         protected /*virtual */BufferSegment CalculateRecordMac(KeyParameter macKey, BufferSegment additionalData, byte[] buf, int off, int len)
         {
-            Poly1305 mac = new Poly1305();
+            IMac mac = new Poly1305();
             mac.Init(macKey);
 
             UpdateRecordMacText(mac, additionalData);
@@ -176,13 +176,13 @@ namespace BestHTTP.SecureProtocol.Org.BouncyCastle.Crypto.Tls
             return MacUtilities.DoFinalOptimized(mac);
         }
 
-        protected /*virtual */void UpdateRecordMacLength(Poly1305 mac, int len)
+        protected /*virtual */void UpdateRecordMacLength(IMac mac, int len)
         {
             byte[] longLen = Pack.UInt64_To_LE((ulong)len);
             mac.BlockUpdate(longLen, 0, longLen.Length);
         }
 
-        protected /*virtual */void UpdateRecordMacText(Poly1305 mac, BufferSegment buf)
+        protected /*virtual */void UpdateRecordMacText(IMac mac, BufferSegment buf)
         {
             mac.BlockUpdate(buf.Data, buf.Offset, buf.Count);
 

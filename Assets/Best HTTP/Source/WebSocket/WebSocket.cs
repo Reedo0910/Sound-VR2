@@ -17,9 +17,9 @@ namespace BestHTTP.WebSocket
     public sealed class WebSocket
     {
         /// <summary>
-        /// Maximum payload size of a websocket frame.
+        /// Maximum payload size of a websocket frame. Its default value is 32 KiB.
         /// </summary>
-        public static uint MaxFragmentSize = uint.MaxValue / 2;
+        public static uint MaxFragmentSize = UInt16.MaxValue / 2;
 
         public WebSocketStates State { get { return this.implementation.State; } }
 
@@ -110,8 +110,14 @@ namespace BestHTTP.WebSocket
         public OnWebSocketIncompleteFrameDelegate OnIncompleteFrame;
 #endif
 
+        /// <summary>
+        /// Logging context of this websocket instance.
+        /// </summary>
         public LoggingContext Context { get; private set; }
 
+        /// <summary>
+        /// The underlying, real implementation.
+        /// </summary>
         private WebSocketBaseImplementation implementation;
 
         /// <summary>
