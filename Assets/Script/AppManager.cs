@@ -21,7 +21,7 @@ public class AppManager : MonoBehaviour
 
     public bool isRightHanded = true; // use which controller by default
 
-    private bool isTaskStarted = false;
+    private bool isTestStarted = false;
 
     public string currentPlayingObject = "";
     private int currentAssignedTaskIndex = -1;
@@ -116,7 +116,79 @@ public class AppManager : MonoBehaviour
     [NonSerialized]
     public OVRInput.Controller activeController;
 
+    [HideInInspector]
+    public int currentAttempt = 0;
+
+    [NonSerialized]
+    public DateTime? testStartDate = null;
+
     private bool isSkippable = false;
+
+    [NonSerialized]
+    public List<Vector3> currentUserPositions = new List<Vector3>();
+    [NonSerialized]
+    public List<Vector3> currentUserRotations = new List<Vector3>();
+
+    // record within selection
+    public class UserPosition
+    {
+        public List<Vector3> positions;
+    }
+    // record within selection
+    public class UserRotation
+    {
+        public List<Vector3> rotations;
+    }
+
+    [NonSerialized]
+    public List<UserPosition> userPositionsRecord = new List<UserPosition>(); // all the record in an attempt
+    [NonSerialized]
+    public List<UserRotation> userRotationsRecord = new List<UserRotation>(); // all the record in an attempt
+
+    // Interval of position/rotation tracking
+    [SerializeField]
+    private float trackingScale = 0.1f;
+
+    [NonSerialized]
+    public DateTime? lastTimestamp = null;
+    [NonSerialized]
+    public List<double> selectingDurations = new List<double>();
+
+    [NonSerialized]
+    public List<string> userSelectObjectNames = new List<string>();
+    [NonSerialized]
+    public List<Vector3> userSelectPositions = new List<Vector3>();
+
+    [NonSerialized]
+    public List<string> playingSourceObjectNames = new List<string>();
+    [NonSerialized]
+    public List<Vector3> playingSourceObjectPositions = new List<Vector3>();
+
+    [NonSerialized]
+    public List<string> playingClipNames = new List<string>();
+
+    public class OtherPlayingClipNames
+    {
+        public List<string> clipNames;
+    }
+
+    [NonSerialized]
+    public List<OtherPlayingClipNames> otherPlayingClipNamesList = new List<OtherPlayingClipNames>();
+
+    public class OtherPlayingSourceObjectNames
+    {
+        public List<string> objectNames;
+    }
+    [NonSerialized]
+    public List<OtherPlayingSourceObjectNames> otherPlayingSourceObjectNamesList = new List<OtherPlayingSourceObjectNames>();
+
+
+    public class OtherPlayingSourceObjectPositions
+    {
+        public List<Vector3> objectPositions;
+    }
+    [NonSerialized]
+    public List<OtherPlayingSourceObjectPositions> otherPlayingSourceObjectPositionsList = new List<OtherPlayingSourceObjectPositions>();
 
     void Awake()
     {
@@ -174,34 +246,22 @@ public class AppManager : MonoBehaviour
             if (isRightHanded)
             {
                 // Detect button inputs on the right controller
-                if (OVRInput.GetDown(OVRInput.Button.Two))
+                if (OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.One))
                 {
-                    NextMethod();
-                }
-                else if (OVRInput.GetDown(OVRInput.Button.One))
-                {
-                    StartATask();
-
-                    if (isTaskStarted && isSkippable)
+                    if (isTestStarted && isSkippable)
                     {
-                        CompleteATask("");
+                        CompleteATask(null);
                     }
                 }
             }
             else
             {
                 // Detect button inputs on the left controller
-                if (OVRInput.GetDown(OVRInput.Button.Four))
+                if (OVRInput.GetDown(OVRInput.Button.Four) || OVRInput.GetDown(OVRInput.Button.Three))
                 {
-                    NextMethod();
-                }
-                else if (OVRInput.GetDown(OVRInput.Button.Three))
-                {
-                    StartATask();
-
-                    if (isTaskStarted && isSkippable)
+                    if (isTestStarted && isSkippable)
                     {
-                        CompleteATask("");
+                        CompleteATask(null);
                     }
                 }
 
@@ -210,17 +270,11 @@ public class AppManager : MonoBehaviour
         // Individual controller
         else
         {
-            if (OVRInput.GetDown(OVRInput.Button.Two))
+            if (OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.One))
             {
-                NextMethod();
-            }
-            else if (OVRInput.GetDown(OVRInput.Button.One))
-            {
-                StartATask();
-
-                if (isTaskStarted && isSkippable)
+                if (isTestStarted && isSkippable)
                 {
-                    CompleteATask("");
+                    CompleteATask(null);
                 }
             }
         }
@@ -250,44 +304,96 @@ public class AppManager : MonoBehaviour
         SetTestState(curState);
     }
 
-    private void StartATask()
+    public void StartTest(int attempt)
     {
-        if (!isTaskStarted)
-        {
-            isTaskStarted = true;
+        ResetTestState();
 
-            isSkippable = false;
-
-            if (objectRandomList.Count > 0)
-            {
-                currentAssignedTaskIndex = objectRandomList[UnityEngine.Random.Range(0, objectRandomList.Count)];
-                objectRandomList.Remove(currentAssignedTaskIndex);
-
-                List<int> currentQuestList = MyTaskList[currentAssignedTaskIndex].questList;
-                int currentActiveQuestIndex = currentQuestList[UnityEngine.Random.Range(0, currentQuestList.Count)];
-
-                currentQuest = MyQuestList[currentActiveQuestIndex];
-                currentTaskContent = currentQuest.questContent;
-
-                MiniPromptController.instance.ShowTaskPrompt(currentTaskContent);
-
-                taskCoundownCoroutine = StartCountdown();
-                StartCoroutine(taskCoundownCoroutine);
-            }
-        }
+        isTestStarted = true;
+        StartATaskItr(attempt);
     }
 
-    private void TaskStarter()
+    public void SubmitTestData()
+    {
+        MiniPromptController.instance.TaskCompleted(currentAttempt == 3);
+        isTestStarted = false;
+        DateTime testEndDate = DateTime.UtcNow;
+        SocketModule.instance.TestInfoUpdate((DateTime)testStartDate, testEndDate);
+
+        if (trackingCoroutine != null)
+        {
+            StopCoroutine(trackingCoroutine);
+        }
+
+        ResetTestState();
+    }
+
+    public void StopTest()
     {
         if (taskCoundownCoroutine != null)
         {
             StopCoroutine(taskCoundownCoroutine);
         }
 
+        if (trackingCoroutine != null)
+        {
+            StopCoroutine(trackingCoroutine);
+        }
+
+        if (suggestionCoroutine != null)
+        {
+            StopCoroutine(suggestionCoroutine);
+        }
+
+        DisableSuggestion();
+
+        MiniPromptController.instance.TaskHolding();
+        isTestStarted = false;
+        ResetTestState();
+    }
+
+    private void StartATaskItr(int attempt)
+    {
+        isSkippable = false;
+
+        if (objectRandomList.Count > 0)
+        {
+            currentAssignedTaskIndex = objectRandomList[UnityEngine.Random.Range(0, objectRandomList.Count)];
+            objectRandomList.Remove(currentAssignedTaskIndex);
+
+            List<int> currentQuestList = MyTaskList[currentAssignedTaskIndex].questList;
+            int currentActiveQuestIndex = currentQuestList[UnityEngine.Random.Range(0, currentQuestList.Count)];
+
+            currentQuest = MyQuestList[currentActiveQuestIndex];
+            currentTaskContent = currentQuest.questContent;
+
+            MiniPromptController.instance.ShowTaskPrompt(currentTaskContent);
+
+            taskCoundownCoroutine = StartCountdown(attempt);
+            StartCoroutine(taskCoundownCoroutine);
+        }
+    }
+
+    private void TaskStarter(int attempt)
+    {
+        if (taskCoundownCoroutine != null)
+        {
+            StopCoroutine(taskCoundownCoroutine);
+        }
+
+        currentAttempt = attempt;
+        testStartDate = DateTime.UtcNow;
+
+        trackingCoroutine = TrackUserMovement();
+        StartCoroutine(trackingCoroutine);
+
         // All the audio clips that play in this quest 
         List<string> playingClips = new List<string>();
 
         playingClips.Add(currentQuest.tarSoundClip);
+
+        List<string> myOtherPlayingClipNames = new List<string>();
+        List<string> myOtherPlayingSourceObjectNames = new List<string>();
+        List<Vector3> myOtherPlayingSourceObjectPositions = new List<Vector3>();
 
         if (currentQuest.otherSoundClips.Count > 0)
         {
@@ -326,9 +432,33 @@ public class AppManager : MonoBehaviour
 
                 playingClips.Add(otherAudioClipTitle);
 
+                myOtherPlayingClipNames.Add(otherAudioClipTitle);
+
+                GameObject otherPlayingSourceObject = GetGameObjectbySoundClipTitle(otherAudioClipTitle);
+                myOtherPlayingSourceObjectNames.Add(otherPlayingSourceObject.name);
+                myOtherPlayingSourceObjectPositions.Add(otherPlayingSourceObject.transform.position);
+
                 randomPickCount++;
             }
         }
+
+        OtherPlayingClipNames otherPlayingClipNames = new OtherPlayingClipNames
+        {
+            clipNames = myOtherPlayingClipNames
+        };
+        otherPlayingClipNamesList.Add(otherPlayingClipNames);
+
+        OtherPlayingSourceObjectNames otherPlayingSourceObjectNames = new OtherPlayingSourceObjectNames
+        {
+            objectNames = myOtherPlayingSourceObjectNames
+        };
+        otherPlayingSourceObjectNamesList.Add(otherPlayingSourceObjectNames);
+
+        OtherPlayingSourceObjectPositions otherPlayingSourceObjectPositions = new OtherPlayingSourceObjectPositions
+        {
+            objectPositions = myOtherPlayingSourceObjectPositions
+        };
+        otherPlayingSourceObjectPositionsList.Add(otherPlayingSourceObjectPositions);
 
         currentPlayingList.Clear();
         autoPlayAudioCoroutines.Clear();
@@ -351,9 +481,12 @@ public class AppManager : MonoBehaviour
 
         suggestionCoroutine = SuggestionCountdown();
         StartCoroutine(suggestionCoroutine);
+
+        currentUserPositions.Clear();
+        currentUserRotations.Clear();
     }
 
-    public IEnumerator StartCountdown(float countdownVal = 7)
+    public IEnumerator StartCountdown(int attempt, float countdownVal = 7)
     {
         currentCountDownVal = countdownVal;
         while (currentCountDownVal > 0)
@@ -366,7 +499,7 @@ public class AppManager : MonoBehaviour
             yield return new WaitForSeconds(1.0f);
             currentCountDownVal--;
         }
-        TaskStarter();
+        TaskStarter(attempt);
     }
 
     public IEnumerator PlayAudioClip(GameObject player)
@@ -404,21 +537,66 @@ public class AppManager : MonoBehaviour
         isSkippable = false;
     }
 
-    public void CompleteATask(string objectName)
+    public void CompleteATask(GameObject selectedObject)
     {
-        if (isTaskStarted)
+        if (isTestStarted)
         {
             string tarObjName = "";
 
+            Vector3 tarObjPosition = new Vector3(0, 0, 0);
+
             if (GetGameObjectbySoundClipTitle(currentQuest.tarSoundClip))
             {
-                tarObjName = GetGameObjectbySoundClipTitle(currentQuest.tarSoundClip).name;
+                GameObject tarObj = GetGameObjectbySoundClipTitle(currentQuest.tarSoundClip);
+                tarObjName = tarObj.name;
+                tarObjPosition = tarObj.transform.position;
             }
 
-            if (objectName == tarObjName)
+            DateTime myTimestamp = DateTime.UtcNow;
+            double myDuration = 0f;
+            if (lastTimestamp == null)
             {
-                startHapticFeedback();
+                myDuration = myTimestamp.Subtract((DateTime)testStartDate).TotalSeconds;
             }
+            else
+            {
+                myDuration = myTimestamp.Subtract((DateTime)lastTimestamp).TotalSeconds;
+            }
+            selectingDurations.Add(myDuration);
+            lastTimestamp = myTimestamp;
+
+            List<Vector3> newPositions = new List<Vector3>(currentUserPositions);
+            UserPosition userPosition = new UserPosition
+            {
+                positions = newPositions
+            };
+            userPositionsRecord.Add(userPosition);
+
+            List<Vector3> newRotations = new List<Vector3>(currentUserRotations);
+            UserRotation userRotation = new UserRotation
+            {
+                rotations = newRotations
+            };
+            userRotationsRecord.Add(userRotation);
+
+            //if (objectName == tarObjName)
+            //{
+            startHapticFeedback();
+            //}
+
+            string selectedObjectName = "";
+            Vector3 selectedObjectPosition = new Vector3(0, 0, 0);
+
+            if (selectedObject != null)
+            {
+                selectedObjectName = selectedObject.name;
+                selectedObjectPosition = selectedObject.transform.position;
+            }
+
+            userSelectObjectNames.Add(selectedObjectName);
+            userSelectPositions.Add(selectedObjectPosition);
+            playingSourceObjectNames.Add(tarObjName);
+            playingSourceObjectPositions.Add(tarObjPosition);
 
             MiniPromptController.instance.HideTaskPrompt();
 
@@ -448,16 +626,15 @@ public class AppManager : MonoBehaviour
             currentPlayingObject = "";
             currentQuest = null;
 
-            isTaskStarted = false;
+            isTestStarted = false;
 
             if (objectRandomList.Count == 0)
             {
-                MiniPromptController.instance.TaskCompleted(true);
-                //ResetTestState();
+                SubmitTestData();
             }
             else
             {
-                StartATask();
+                StartATaskItr(currentAttempt);
             }
         }
     }
@@ -638,24 +815,41 @@ public class AppManager : MonoBehaviour
 
         StopAllCoroutines();
 
-        //userSelectIds.Clear();
-        //playingSourceIds.Clear();
-        //playingClipIds.Clear();
-        //playingClipNames.Clear();
-        //userSelectPositions.Clear();
-        //playingSourcePositions.Clear();
-        //selectingDurations.Clear();
-        //currentUserPositions.Clear();
-        //currentUserRotations.Clear();
-        //userPositionsRecord.Clear();
-        //userRotationsRecord.Clear();
+        userSelectObjectNames.Clear();
+        userSelectPositions.Clear();
 
-        //lastTimestamp = null;
+        playingSourceObjectNames.Clear();
+        playingSourceObjectPositions.Clear();
 
-        //currentAttempt = 0;
-        //testStartDate = null;
+        playingClipNames.Clear();
+
+        otherPlayingClipNamesList.Clear();
+        otherPlayingSourceObjectNamesList.Clear();
+        otherPlayingSourceObjectPositionsList.Clear();
+
+
+        selectingDurations.Clear();
+        currentUserPositions.Clear();
+        currentUserRotations.Clear();
+        userPositionsRecord.Clear();
+        userRotationsRecord.Clear();
+
+        lastTimestamp = null;
+
+        currentAttempt = 0;
+        testStartDate = null;
         taskCoundownCoroutine = null;
         trackingCoroutine = null;
+    }
+
+    public IEnumerator TrackUserMovement()
+    {
+        while (isTestStarted)
+        {
+            currentUserPositions.Add(centerEyeAnchor.transform.localPosition);
+            currentUserRotations.Add(playerObj.transform.localRotation.eulerAngles);
+            yield return new WaitForSeconds(trackingScale);
+        }
     }
 }
 
