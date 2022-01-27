@@ -814,6 +814,8 @@ public class AppManager : MonoBehaviour
         GenerateRandomList();
 
         StopAllCoroutines();
+        
+        StopAllPlaying();
 
         userSelectObjectNames.Clear();
         userSelectPositions.Clear();
@@ -849,6 +851,15 @@ public class AppManager : MonoBehaviour
             currentUserPositions.Add(centerEyeAnchor.transform.localPosition);
             currentUserRotations.Add(playerObj.transform.localRotation.eulerAngles);
             yield return new WaitForSeconds(trackingScale);
+        }
+    }
+
+    private void StopAllPlaying()
+    {
+        for (int i = 0; i < audioSourceList.Count; i++)
+        {
+            MusicPlayer myMusicPlayer = audioSourceList[i].GetComponentInChildren<MusicPlayer>();
+            myMusicPlayer.StopPlaying();
         }
     }
 }
