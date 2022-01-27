@@ -15,16 +15,5 @@ public class Interactable : MonoBehaviour
         }
 
         AppManager.instance.CompleteATask(gameObject);
-
-        //for (int i = 0; i < AppManager.instance.audioSourceList.Count; i++)
-        //{
-        //    var tar = AppManager.instance.audioSourceList[i];
-        //    if (tar.name.Equals("Source_" + gameObject.name))
-        //    {
-        //        tar.GetComponentInChildren<MusicPlayer>().StopPlaying();
-        //        tar.GetComponentInChildren<MusicPlayer>().StartPlaying();
-        //        break;
-        //    }
-        //}
     }
 }
