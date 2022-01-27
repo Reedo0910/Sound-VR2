@@ -51,8 +51,8 @@ public class ConfigManager : MonoBehaviour
             useMuteBackgroundMusicStr = data["AppManager"]["is_background_music_muted"];
 
             // SocketIO config
-            //useTokenStr = data["SocketIO"]["token"];
-            //useDevStr = data["SocketIO"]["is_dev"];
+            useTokenStr = data["SocketIO"]["token"];
+            useDevStr = data["SocketIO"]["is_dev"];
         }
     }
 }

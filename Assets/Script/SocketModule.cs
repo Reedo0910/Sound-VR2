@@ -56,12 +56,12 @@ public class SocketModule : MonoBehaviour
     {
         public List<SelectInfo> select;
         public List<AnswerInfo> ans;
-        public double avgDistance;
-        public double avgRotationPerSec;
+        public double avg_distance;
+        public double avg_rotation_per_sec;
         public float cr;
         public double toc;
-        public DateTime startdate;
-        public DateTime enddate;
+        public DateTime start_date;
+        public DateTime end_date;
     }
 
     void Awake()
@@ -170,6 +170,8 @@ public class SocketModule : MonoBehaviour
         List<string> userSelectList = AppManager.instance.userSelectObjectNames.ToList();
         List<string> answerList = AppManager.instance.playingSourceObjectNames.ToList();
 
+        List<double> userDuration = AppManager.instance.selectingDurations.ToList();
+
         // calculate correct rate
         int matches = 0;
 
@@ -179,7 +181,7 @@ public class SocketModule : MonoBehaviour
             {
                 break;
             }
-            if (userSelectList[i] == answerList[i])
+            if (userSelectList[i] == answerList[i] && userDuration[i] >= 0)
             {
                 matches++;
             }
@@ -205,7 +207,7 @@ public class SocketModule : MonoBehaviour
                 position = AppManager.instance.userSelectPositions[i].ToString(),
                 durationTime = myDuration,
                 distanceTotal = GetTotalDistanceOnHorizontal(myPositionRecord),
-                rotationPerSec = GetDiffRotationOnYAxis(myRotationRecord) / myDuration,
+                rotationPerSec = myDuration > 0 ? GetDiffRotationOnYAxis(myRotationRecord) / myDuration : 0,
                 userPositionRecord = NormalizeVector3List(myPositionRecord),
                 userRotationRecord = NormalizeVector3List(myRotationRecord)
             };
@@ -246,13 +248,14 @@ public class SocketModule : MonoBehaviour
             attempt = AppManager.instance.currentAttempt,
             select = selectInfos,
             ans = answerInfos,
-            avgDistance = myAvgDistance,
-            avgRotationPerSec = myAvgRotationPerSec,
+            avg_distance = myAvgDistance,
+            avg_rotation_per_sec = myAvgRotationPerSec,
             cr = correctRate,
             toc = timeOfCompletion,
-            startdate = startdate,
-            enddate = enddate
+            start_date = startdate,
+            end_date = enddate
         };
+
         Manager.Socket.Emit("test info", testInfo);
     }
 
@@ -285,9 +288,9 @@ public class SocketModule : MonoBehaviour
         return diff;
     }
 
-    private List<String> NormalizeVector3List(List<Vector3> list)
+    private List<string> NormalizeVector3List(List<Vector3> list)
     {
-        List<String> newList = new List<String>();
+        List<string> newList = new List<string>();
         for (int i = 0; i < list.Count; i++)
         {
             newList.Add(list[i].ToString());

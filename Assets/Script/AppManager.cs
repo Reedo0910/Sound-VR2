@@ -22,8 +22,9 @@ public class AppManager : MonoBehaviour
     public bool isRightHanded = true; // use which controller by default
 
     private bool isTestStarted = false;
+    private bool isTaskStarted = false;
 
-    public string currentPlayingObject = "";
+    private string currentPlayingClip = "";
     private int currentAssignedTaskIndex = -1;
 
 
@@ -85,6 +86,7 @@ public class AppManager : MonoBehaviour
     private float suggestionCountDownVal = 0f;
 
     IEnumerator trackingCoroutine = null;
+    IEnumerator testPrepareCoundownCoroutine = null;
     IEnumerator taskCoundownCoroutine = null;
     IEnumerator suggestionCoroutine = null;
 
@@ -248,7 +250,7 @@ public class AppManager : MonoBehaviour
                 // Detect button inputs on the right controller
                 if (OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.One))
                 {
-                    if (isTestStarted && isSkippable)
+                    if (isTestStarted && isTaskStarted && isSkippable)
                     {
                         CompleteATask(null);
                     }
@@ -259,7 +261,7 @@ public class AppManager : MonoBehaviour
                 // Detect button inputs on the left controller
                 if (OVRInput.GetDown(OVRInput.Button.Four) || OVRInput.GetDown(OVRInput.Button.Three))
                 {
-                    if (isTestStarted && isSkippable)
+                    if (isTestStarted && isTaskStarted && isSkippable)
                     {
                         CompleteATask(null);
                     }
@@ -272,7 +274,7 @@ public class AppManager : MonoBehaviour
         {
             if (OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.One))
             {
-                if (isTestStarted && isSkippable)
+                if (isTestStarted && isTaskStarted && isSkippable)
                 {
                     CompleteATask(null);
                 }
@@ -309,7 +311,23 @@ public class AppManager : MonoBehaviour
         ResetTestState();
 
         isTestStarted = true;
-        StartATaskItr(attempt);
+        testStartDate = DateTime.UtcNow;
+        currentAttempt = attempt;
+
+        testPrepareCoundownCoroutine = TestPrepareCountdown();
+        StartCoroutine(testPrepareCoundownCoroutine);
+    }
+
+    public IEnumerator TestPrepareCountdown(float countdownVal = 5)
+    {
+        currentCountDownVal = countdownVal;
+        while (currentCountDownVal > 0)
+        {
+            MiniPromptController.instance.TestPreparing(currentCountDownVal);
+            yield return new WaitForSeconds(1.0f);
+            currentCountDownVal--;
+        }
+        StartATaskItr();
     }
 
     public void SubmitTestData()
@@ -329,6 +347,11 @@ public class AppManager : MonoBehaviour
 
     public void StopTest()
     {
+        if (testPrepareCoundownCoroutine != null)
+        {
+            StopCoroutine(testPrepareCoundownCoroutine);
+        }
+
         if (taskCoundownCoroutine != null)
         {
             StopCoroutine(taskCoundownCoroutine);
@@ -346,12 +369,14 @@ public class AppManager : MonoBehaviour
 
         DisableSuggestion();
 
-        MiniPromptController.instance.TaskHolding();
         isTestStarted = false;
+        isTaskStarted = false;
         ResetTestState();
+
+        MiniPromptController.instance.TaskHolding();
     }
 
-    private void StartATaskItr(int attempt)
+    private void StartATaskItr()
     {
         isSkippable = false;
 
@@ -368,20 +393,17 @@ public class AppManager : MonoBehaviour
 
             MiniPromptController.instance.ShowTaskPrompt(currentTaskContent);
 
-            taskCoundownCoroutine = StartCountdown(attempt);
+            taskCoundownCoroutine = StartCountdown();
             StartCoroutine(taskCoundownCoroutine);
         }
     }
 
-    private void TaskStarter(int attempt)
+    private void TaskStarter()
     {
         if (taskCoundownCoroutine != null)
         {
             StopCoroutine(taskCoundownCoroutine);
         }
-
-        currentAttempt = attempt;
-        testStartDate = DateTime.UtcNow;
 
         trackingCoroutine = TrackUserMovement();
         StartCoroutine(trackingCoroutine);
@@ -390,6 +412,10 @@ public class AppManager : MonoBehaviour
         List<string> playingClips = new List<string>();
 
         playingClips.Add(currentQuest.tarSoundClip);
+
+        currentPlayingClip = currentQuest.tarSoundClip;
+
+        playingClipNames.Add(currentQuest.tarSoundClip);
 
         List<string> myOtherPlayingClipNames = new List<string>();
         List<string> myOtherPlayingSourceObjectNames = new List<string>();
@@ -418,7 +444,7 @@ public class AppManager : MonoBehaviour
 
                 for (int j = 0; j < playingClips.Count; j++)
                 {
-                    if (PositionCheck(GetGameObjectbySoundClipTitle(playingClips[j]), GetGameObjectbySoundClipTitle(otherAudioClipTitle)))
+                    if (ReferenceEquals(GetGameObjectbySoundClipTitle(playingClips[j]), GetGameObjectbySoundClipTitle(otherAudioClipTitle)))
                     {
                         hasSameSoundSource = true;
                         break;
@@ -479,6 +505,8 @@ public class AppManager : MonoBehaviour
 
         MiniPromptController.instance.TaskStarted();
 
+        isTaskStarted = true;
+
         suggestionCoroutine = SuggestionCountdown();
         StartCoroutine(suggestionCoroutine);
 
@@ -486,7 +514,7 @@ public class AppManager : MonoBehaviour
         currentUserRotations.Clear();
     }
 
-    public IEnumerator StartCountdown(int attempt, float countdownVal = 7)
+    public IEnumerator StartCountdown(float countdownVal = 7)
     {
         currentCountDownVal = countdownVal;
         while (currentCountDownVal > 0)
@@ -499,7 +527,7 @@ public class AppManager : MonoBehaviour
             yield return new WaitForSeconds(1.0f);
             currentCountDownVal--;
         }
-        TaskStarter(attempt);
+        TaskStarter();
     }
 
     public IEnumerator PlayAudioClip(GameObject player)
@@ -511,7 +539,11 @@ public class AppManager : MonoBehaviour
         player.GetComponentInChildren<MusicPlayer>().StartPlaying();
 
         currentPlayingList.Add(player);
-        currentPlayingObject = player.name;
+
+        if ("Source_" + currentPlayingClip == player.name)
+        {
+            lastTimestamp = DateTime.UtcNow;
+        }
     }
 
     public IEnumerator SuggestionCountdown(float countdownVal = 10)
@@ -534,121 +566,129 @@ public class AppManager : MonoBehaviour
     private void DisableSuggestion()
     {
         MiniPromptController.instance.HideSuggestionText();
+        MiniPromptController.instance.HideTaskPrompt();
         isSkippable = false;
     }
 
     public void CompleteATask(GameObject selectedObject)
     {
-        if (isTestStarted)
+        if (!isTestStarted || !isTaskStarted) { return; }
+
+        isTaskStarted = false;
+
+        string tarObjName = "";
+        Vector3 tarObjPosition = new Vector3(0, 0, 0);
+
+        if (GetGameObjectbySoundClipTitle(currentQuest.tarSoundClip))
         {
-            string tarObjName = "";
+            GameObject tarObj = GetGameObjectbySoundClipTitle(currentQuest.tarSoundClip);
+            tarObjName = tarObj.name;
+            tarObjPosition = tarObj.transform.position;
+        }
 
-            Vector3 tarObjPosition = new Vector3(0, 0, 0);
+        DateTime myTimestamp = DateTime.UtcNow;
+        double myDuration = 0f;
 
-            if (GetGameObjectbySoundClipTitle(currentQuest.tarSoundClip))
+        if (lastTimestamp == null)
+        {
+            myDuration = -1f;
+        }
+        else
+        {
+            if (DateTime.Compare((DateTime)lastTimestamp, myTimestamp) > 0)
             {
-                GameObject tarObj = GetGameObjectbySoundClipTitle(currentQuest.tarSoundClip);
-                tarObjName = tarObj.name;
-                tarObjPosition = tarObj.transform.position;
-            }
-
-            DateTime myTimestamp = DateTime.UtcNow;
-            double myDuration = 0f;
-            if (lastTimestamp == null)
-            {
-                myDuration = myTimestamp.Subtract((DateTime)testStartDate).TotalSeconds;
+                myDuration = -1f;
             }
             else
             {
                 myDuration = myTimestamp.Subtract((DateTime)lastTimestamp).TotalSeconds;
             }
-            selectingDurations.Add(myDuration);
-            lastTimestamp = myTimestamp;
-
-            List<Vector3> newPositions = new List<Vector3>(currentUserPositions);
-            UserPosition userPosition = new UserPosition
-            {
-                positions = newPositions
-            };
-            userPositionsRecord.Add(userPosition);
-
-            List<Vector3> newRotations = new List<Vector3>(currentUserRotations);
-            UserRotation userRotation = new UserRotation
-            {
-                rotations = newRotations
-            };
-            userRotationsRecord.Add(userRotation);
-
-            //if (objectName == tarObjName)
-            //{
-            startHapticFeedback();
-            //}
-
-            string selectedObjectName = "";
-            Vector3 selectedObjectPosition = new Vector3(0, 0, 0);
-
-            if (selectedObject != null)
-            {
-                selectedObjectName = selectedObject.name;
-                selectedObjectPosition = selectedObject.transform.position;
-            }
-
-            userSelectObjectNames.Add(selectedObjectName);
-            userSelectPositions.Add(selectedObjectPosition);
-            playingSourceObjectNames.Add(tarObjName);
-            playingSourceObjectPositions.Add(tarObjPosition);
-
-            MiniPromptController.instance.HideTaskPrompt();
-
-            if (suggestionCoroutine != null)
-            {
-                StopCoroutine(suggestionCoroutine);
-            }
-
-            // Stop all autoplay Coroutine
-            for (int i = 0; i < autoPlayAudioCoroutines.Count; i++)
-            {
-                if (autoPlayAudioCoroutines[i] != null)
-                {
-                    StopCoroutine(autoPlayAudioCoroutines[i]);
-                }
-            }
-
-            DisableSuggestion();
-
-            for (int i = 0; i < currentPlayingList.Count; i++)
-            {
-                currentPlayingList[i].GetComponentInChildren<MusicPlayer>().StopPlaying();
-            }
-
-            currentPlayingList.Clear();
-
-            currentPlayingObject = "";
-            currentQuest = null;
-
-            isTestStarted = false;
-
-            if (objectRandomList.Count == 0)
-            {
-                SubmitTestData();
-            }
-            else
-            {
-                StartATaskItr(currentAttempt);
-            }
         }
-    }
 
-    private bool PositionCheck(GameObject firstObject, GameObject secondObject)
-    {
-        if (firstObject != null && secondObject != null)
+        selectingDurations.Add(myDuration);
+
+        lastTimestamp = null;
+
+        List<Vector3> newPositions = new List<Vector3>(currentUserPositions);
+        UserPosition userPosition = new UserPosition
         {
-            return firstObject.transform.localPosition.x == secondObject.transform.localPosition.x
-            && firstObject.transform.localPosition.y == secondObject.transform.localPosition.y
-            && firstObject.transform.localPosition.z == secondObject.transform.localPosition.z;
+            positions = newPositions
+        };
+        userPositionsRecord.Add(userPosition);
+
+        List<Vector3> newRotations = new List<Vector3>(currentUserRotations);
+        UserRotation userRotation = new UserRotation
+        {
+            rotations = newRotations
+        };
+        userRotationsRecord.Add(userRotation);
+
+        //if (objectName == tarObjName)
+        //{
+        startHapticFeedback();
+        //}
+
+        string selectedObjectName = "";
+        Vector3 selectedObjectPosition = new Vector3(0, 0, 0);
+
+        if (selectedObject != null)
+        {
+            selectedObjectName = selectedObject.name;
+            selectedObjectPosition = selectedObject.transform.position;
         }
-        return false;
+
+        userSelectObjectNames.Add(selectedObjectName);
+        userSelectPositions.Add(selectedObjectPosition);
+        playingSourceObjectNames.Add(tarObjName);
+        playingSourceObjectPositions.Add(tarObjPosition);
+
+        if (suggestionCoroutine != null)
+        {
+            StopCoroutine(suggestionCoroutine);
+        }
+
+        // Stop all autoplay Coroutine
+        for (int i = 0; i < autoPlayAudioCoroutines.Count; i++)
+        {
+            if (autoPlayAudioCoroutines[i] != null)
+            {
+                StopCoroutine(autoPlayAudioCoroutines[i]);
+            }
+        }
+
+        DisableSuggestion();
+
+        for (int i = 0; i < currentPlayingList.Count; i++)
+        {
+            currentPlayingList[i].GetComponentInChildren<MusicPlayer>().StopPlaying();
+        }
+
+        currentPlayingList.Clear();
+
+        currentPlayingClip = "";
+        currentQuest = null;
+
+        if (objectRandomList.Count == 0)
+        {
+            SubmitTestData();
+        }
+        else
+        {
+            StartATaskItr();
+        }
+
     }
+
+    //private bool PositionCheck(GameObject firstObject, GameObject secondObject)
+    //{
+    //    if (firstObject != null && secondObject != null)
+    //    {
+    //        return firstObject.transform.localPosition.x == secondObject.transform.localPosition.x
+    //        && firstObject.transform.localPosition.y == secondObject.transform.localPosition.y
+    //        && firstObject.transform.localPosition.z == secondObject.transform.localPosition.z;
+    //    }
+    //    return false;
+    //}
 
     private GameObject GetGameObjectbySoundClipTitle(string title)
     {
@@ -809,12 +849,15 @@ public class AppManager : MonoBehaviour
 
     public void ResetTestState()
     {
+        isTaskStarted = false;
+        isTestStarted = false;
+
         DisableSuggestion();
 
         GenerateRandomList();
 
         StopAllCoroutines();
-        
+
         StopAllPlaying();
 
         userSelectObjectNames.Clear();
@@ -838,10 +881,13 @@ public class AppManager : MonoBehaviour
 
         lastTimestamp = null;
 
+        currentPlayingClip = "";
+
         currentAttempt = 0;
         testStartDate = null;
         taskCoundownCoroutine = null;
         trackingCoroutine = null;
+        testPrepareCoundownCoroutine = null;
     }
 
     public IEnumerator TrackUserMovement()

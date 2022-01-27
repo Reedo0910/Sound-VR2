@@ -3740,6 +3740,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1362260153}
+  - component: {fileID: 1362260154}
   m_Layer: 0
   m_Name: SocketModule
   m_TagString: Untagged
@@ -3761,6 +3762,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1362260154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1362260152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a228b6399dfdff5499e0af6936ff1c74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prodUrl: https://vrsoundmap2.velascamp.cn
+  devUrl: http://127.0.0.1:8002
+  isDev: 1
+  token: 8888
 --- !u!1001 &1422727413
 PrefabInstance:
   m_ObjectHideFlags: 0
