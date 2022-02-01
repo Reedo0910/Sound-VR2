@@ -60,6 +60,7 @@ public class SocketModule : MonoBehaviour
         public double avg_rotation_per_sec;
         public float cr;
         public double toc;
+        public double tdt;
         public DateTime start_date;
         public DateTime end_date;
     }
@@ -192,12 +193,14 @@ public class SocketModule : MonoBehaviour
         // calculate time of completion
         double timeOfCompletion = enddate.Subtract(startdate).TotalSeconds;
 
+        // caculate total duration time
+        double totalDurationTime = 0f;
+
         List<SelectInfo> selectInfos = new List<SelectInfo>();
         List<AnswerInfo> answerInfos = new List<AnswerInfo>();
 
         for (int i = 0; i < userSelectList.Count; i++)
         {
-
             double myDuration = AppManager.instance.selectingDurations[i];
             List<Vector3> myPositionRecord = AppManager.instance.userPositionsRecord[i].positions;
             List<Vector3> myRotationRecord = AppManager.instance.userRotationsRecord[i].rotations;
@@ -213,6 +216,8 @@ public class SocketModule : MonoBehaviour
             };
 
             selectInfos.Add(selectInfo);
+
+            totalDurationTime += myDuration;
         }
 
         for (int i = 0; i < answerList.Count; i++)
@@ -252,6 +257,7 @@ public class SocketModule : MonoBehaviour
             avg_rotation_per_sec = myAvgRotationPerSec,
             cr = correctRate,
             toc = timeOfCompletion,
+            tdt = totalDurationTime,
             start_date = startdate,
             end_date = enddate
         };

@@ -332,6 +332,8 @@ public class AppManager : MonoBehaviour
 
     public void SubmitTestData()
     {
+        bool isConditionEnd = currentAttempt == 2;
+
         isTestStarted = false;
         DateTime testEndDate = DateTime.UtcNow;
         SocketModule.instance.TestInfoUpdate((DateTime)testStartDate, testEndDate);
@@ -343,7 +345,7 @@ public class AppManager : MonoBehaviour
 
         ResetTestState();
 
-        MiniPromptController.instance.TaskCompleted(currentAttempt == 2);
+        MiniPromptController.instance.TaskCompleted(isConditionEnd);
     }
 
     public void StopTest()

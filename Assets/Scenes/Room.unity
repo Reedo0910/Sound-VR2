@@ -809,6 +809,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   suggestionTextLeft: If you cannot locate the sound, press X to skip
   suggestionTextRight: If you cannot locate the sound, press A to skip
+  highlightingText: 'Clue: The flashing objects are interactable in the test.'
   waitingText: Please wait for the moderator to start a task...
   completingText: Task Complete
   takeoffText: Please kindly take off the VR headset.
