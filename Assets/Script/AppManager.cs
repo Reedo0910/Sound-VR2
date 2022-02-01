@@ -332,7 +332,6 @@ public class AppManager : MonoBehaviour
 
     public void SubmitTestData()
     {
-        MiniPromptController.instance.TaskCompleted(currentAttempt == 3);
         isTestStarted = false;
         DateTime testEndDate = DateTime.UtcNow;
         SocketModule.instance.TestInfoUpdate((DateTime)testStartDate, testEndDate);
@@ -343,6 +342,8 @@ public class AppManager : MonoBehaviour
         }
 
         ResetTestState();
+
+        MiniPromptController.instance.TaskCompleted(currentAttempt == 3);
     }
 
     public void StopTest()
@@ -829,6 +830,7 @@ public class AppManager : MonoBehaviour
 
             default:
                 myTestState = TestType.Off;
+                MiniPromptController.instance.HighlightingPreTask();
                 break;
         }
 
@@ -844,6 +846,8 @@ public class AppManager : MonoBehaviour
             isTextTagIndicator = false;
 
             playerIndicatorOnMap.SetActive(true);
+
+            MiniPromptController.instance.TaskHolding();
         }
     }
 

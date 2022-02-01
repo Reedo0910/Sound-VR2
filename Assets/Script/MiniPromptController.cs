@@ -27,6 +27,8 @@ public class MiniPromptController : MonoBehaviour
     private string suggestionTextRight = "If you cannot locate the sound, press A to skip";
 
     [SerializeField]
+    private string highlightingText = "Clue: The flashing objects are interactable in the test.";
+    [SerializeField]
     private string waitingText = "Please wait for the moderator to start a task...";
     [SerializeField]
     private string completingText = "Task Complete";
@@ -61,6 +63,12 @@ public class MiniPromptController : MonoBehaviour
 
         TaskHolding();
         HideTaskPrompt();
+    }
+
+    public void HighlightingPreTask()
+    {
+        suggestionBoxObj.SetActive(true);
+        suggestionText.text = highlightingText;
     }
 
     public void TaskHolding()
