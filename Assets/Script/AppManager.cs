@@ -343,7 +343,7 @@ public class AppManager : MonoBehaviour
 
         ResetTestState();
 
-        MiniPromptController.instance.TaskCompleted(currentAttempt == 3);
+        MiniPromptController.instance.TaskCompleted(currentAttempt == 2);
     }
 
     public void StopTest()
