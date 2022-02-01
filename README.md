@@ -8,7 +8,7 @@
 
 1. [long] (Radio 1 of 3) Find out the waterfall sound (0-2)
 
-2. [long] (Enviroment - barking dog) Point out the sounding object (3)
+2. [long] (Enviroment - barking dog) Point out the sounding object (3,22)
 
 3. [long] (Telephone) Find out the ringing phone (4-6)
 
