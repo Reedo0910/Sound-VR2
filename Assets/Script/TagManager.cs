@@ -48,25 +48,23 @@ public class TagManager : MonoBehaviour
 
     private void BindTagObject()
     {
-        if (container == null)
+        if (container != null)
         {
-            return;
-        }
+            for (int i = 0; i < MyTaggedObjectList.Count; i++)
+            {
+                MyTaggedObject obj = MyTaggedObjectList[i];
 
-        for (int i = 0; i < MyTaggedObjectList.Count; i++)
-        {
-            MyTaggedObject obj = MyTaggedObjectList[i];
+                GameObject tar = obj.tarObject;
 
-            GameObject tar = obj.tarObject;
+                GameObject go = Instantiate(tagPrefab, tar.transform.position, Quaternion.identity);
+                go.name = "Tag_" + i;
 
-            GameObject go = Instantiate(tagPrefab, tar.transform.position, Quaternion.identity);
-            go.name = "Tag_" + i;
+                go.transform.Find("Tag Container").localPosition = new Vector3(0, obj.indicatorHeight, 0);
 
-            go.transform.Find("Tag Container").localPosition = new Vector3(0, obj.indicatorHeight, 0);
+                go.GetComponentInChildren<TextMesh>().text = obj.objectTypeName;
 
-            go.GetComponentInChildren<TextMesh>().text = obj.objectTypeName;
-
-            go.transform.SetParent(container);
+                go.transform.SetParent(container);
+            }
         }
     }
 }
