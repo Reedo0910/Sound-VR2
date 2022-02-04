@@ -725,7 +725,7 @@ public class AppManager : MonoBehaviour
             go.name = "Source_" + obj.title;
             go.transform.localScale = obj.scale;
 
-            go.transform.Find("Tag Conatiner").localPosition = new Vector3(0, obj.indicatorHeight, 0);
+            go.transform.Find("Tag Container").localPosition = new Vector3(0, obj.indicatorHeight, 0);
 
             var objMusicPlayer = go.GetComponentInChildren<MusicPlayer>();
             objMusicPlayer.audioClip = obj.audioClip;

@@ -202,6 +202,95 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5549607}
   m_CullTransparentMesh: 1
+--- !u!1 &6862484
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6862486}
+  - component: {fileID: 6862485}
+  m_Layer: 0
+  m_Name: TagManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &6862485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6862484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41d322d1ce5712940827b180fc1e90df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tagPrefab: {fileID: 4234046803067546048, guid: 4decb2417ecb3dd419bf3af52caa0458, type: 3}
+  MyTaggedObjectList:
+  - objectTypeName: Radio
+    tarObject: {fileID: 425031635}
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    indicatorHeight: 1
+  - objectTypeName: Radio
+    tarObject: {fileID: 648982100}
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    indicatorHeight: 1
+  - objectTypeName: Radio
+    tarObject: {fileID: 132303689}
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    indicatorHeight: 1
+  - objectTypeName: Telephone
+    tarObject: {fileID: 1095705063}
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    indicatorHeight: 0.5
+  - objectTypeName: Telephone
+    tarObject: {fileID: 1098756238}
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    indicatorHeight: 0.5
+  - objectTypeName: Telephone
+    tarObject: {fileID: 1687194091}
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    indicatorHeight: 0.5
+  - objectTypeName: Teddy
+    tarObject: {fileID: 1233384868}
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    indicatorHeight: 3
+  - objectTypeName: Teddy
+    tarObject: {fileID: 1018588506}
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    indicatorHeight: 3.5
+  - objectTypeName: Teddy
+    tarObject: {fileID: 193665401}
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    indicatorHeight: 2
+  - objectTypeName: Puppy Chair
+    tarObject: {fileID: 1333421245}
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    indicatorHeight: 1.2
+  - objectTypeName: Puppy Chair
+    tarObject: {fileID: 854503096}
+    scale: {x: 0.2, y: 0.2, z: 0.2}
+    indicatorHeight: 1.2
+--- !u!4 &6862486
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6862484}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &15225476
 GameObject:
   m_ObjectHideFlags: 0
@@ -482,7 +571,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4615899522670610611, guid: d1dd336355b209c4684dc2f33b607507, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 4615899522670610611, guid: d1dd336355b209c4684dc2f33b607507, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1114,6 +1203,36 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 432868, guid: d9812c5dc9c93044493510ec48b74fbe, type: 3}
   m_PrefabInstance: {fileID: 232813983}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &255360333
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 255360334}
+  m_Layer: 0
+  m_Name: TagGroup
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &255360334
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255360333}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.50335443, y: 0.3823074, z: -1.2998135}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &271572253
 GameObject:
   m_ObjectHideFlags: 0
@@ -1511,7 +1630,7 @@ Transform:
   m_Children:
   - {fileID: 1539249531}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &611844084 stripped
 Transform:
@@ -2727,7 +2846,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1070054677
 GameObject:
@@ -3032,7 +3151,7 @@ PrefabInstance:
       objectReference: {fileID: 1126503499}
     - target: {fileID: 5383772124775127370, guid: 46b412b45611f6c4983942c56750907d, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5383772124775127370, guid: 46b412b45611f6c4983942c56750907d, type: 3}
       propertyPath: m_LocalScale.x
@@ -3718,7 +3837,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3844,7 +3963,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1362260154
 MonoBehaviour:
@@ -4065,7 +4184,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d07deadddfe0f7a4fae1284037effb65, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: d07deadddfe0f7a4fae1284037effb65, type: 3}
       propertyPath: m_LocalScale.x
@@ -4342,7 +4461,7 @@ Transform:
   - {fileID: 799978257}
   - {fileID: 854503095}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1500212502
 GameObject:
@@ -5416,7 +5535,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1673993230
 GameObject:
@@ -6248,7 +6367,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2070185706
 PrefabInstance:
@@ -6403,7 +6522,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4046916415425229363, guid: a771fbd7c5e691c4bab058a457bac04c, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4046916415425229363, guid: a771fbd7c5e691c4bab058a457bac04c, type: 3}
       propertyPath: m_LocalPosition.x
