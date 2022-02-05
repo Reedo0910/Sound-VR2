@@ -80,7 +80,7 @@ public class MiniPromptController : MonoBehaviour
     public void TestPreparing(float countdown)
     {
         suggestionBoxObj.SetActive(true);
-        suggestionText.text = "Ready to beign in " + countdown + " s";
+        suggestionText.text = "Ready to begin in " + countdown + " s";
     }
 
     public void TaskStarting(float countdown)
