@@ -235,47 +235,36 @@ MonoBehaviour:
   MyTaggedObjectList:
   - objectTypeName: Radio
     tarObject: {fileID: 425031635}
-    scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - objectTypeName: Radio
     tarObject: {fileID: 648982100}
-    scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - objectTypeName: Radio
     tarObject: {fileID: 132303689}
-    scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - objectTypeName: Telephone
     tarObject: {fileID: 1095705063}
-    scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 0.5
   - objectTypeName: Telephone
     tarObject: {fileID: 1098756238}
-    scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 0.5
   - objectTypeName: Telephone
     tarObject: {fileID: 1687194091}
-    scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 0.5
-  - objectTypeName: Teddy
+  - objectTypeName: Plushie
     tarObject: {fileID: 1233384868}
-    scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 3
-  - objectTypeName: Teddy
+  - objectTypeName: Plushie
     tarObject: {fileID: 1018588506}
-    scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 3.5
-  - objectTypeName: Teddy
+  - objectTypeName: Plushie
     tarObject: {fileID: 193665401}
-    scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 2
   - objectTypeName: Puppy Chair
     tarObject: {fileID: 1333421245}
-    scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1.2
   - objectTypeName: Puppy Chair
     tarObject: {fileID: 854503096}
-    scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1.2
 --- !u!4 &6862486
 Transform:
@@ -896,8 +885,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b563fa2298213644aa34b4361097312c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  suggestionTextLeft: If you cannot locate the sound, press X to skip
-  suggestionTextRight: If you cannot locate the sound, press A to skip
+  suggestionTextLeft: If you cannot locate the sound, press X / Y to skip
+  suggestionTextRight: If you cannot locate the sound, press A / B to skip
   highlightingText: 'Clue: The flashing objects are interactable in the test.'
   waitingText: Please wait for the moderator to start a task...
   completingText: Task Complete
@@ -5102,6 +5091,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundSourcePrefab: {fileID: 1250795926605351105, guid: 42cbecaa8068b544787008de88102ab8, type: 3}
   isRightHanded: 1
+  isTestStarted: 0
   MySoundClipList:
   - title: Bark-1
     name: Bark
@@ -5340,28 +5330,28 @@ MonoBehaviour:
     questContent: (Radio) Find out the waterfall sound
     tarSoundClip: Waterfall-1
     otherSoundClips:
-    - Frying Food-2
-    - Frying Food-3
-    - Bird Singing-2
-    - Bird Singing-3
+    - Campfire-2
+    - Campfire-3
+    - Gun Shot-2
+    - Gun Shot-3
     randomPlayAmount: 2
   - index: 1
     questContent: (Radio) Find out the waterfall sound
     tarSoundClip: Waterfall-2
     otherSoundClips:
-    - Frying Food-1
-    - Frying Food-3
-    - Bird Singing-1
-    - Bird Singing-3
+    - Campfire-1
+    - Campfire-3
+    - Gun Shot-1
+    - Gun Shot-3
     randomPlayAmount: 2
   - index: 2
     questContent: (Radio) Find out the waterfall sound
     tarSoundClip: Waterfall-3
     otherSoundClips:
-    - Frying Food-1
-    - Frying Food-2
-    - Bird Singing-1
-    - Bird Singing-2
+    - Campfire-1
+    - Campfire-2
+    - Gun Shot-1
+    - Gun Shot-2
     randomPlayAmount: 2
   - index: 3
     questContent: Point out the sounding object
@@ -5369,22 +5359,22 @@ MonoBehaviour:
     otherSoundClips: []
     randomPlayAmount: 0
   - index: 4
-    questContent: (Telephone) Find out the ringing phone
+    questContent: Find out the ringing phone
     tarSoundClip: Phone Ring-1
     otherSoundClips: []
     randomPlayAmount: 0
   - index: 5
-    questContent: (Telephone) Find out the ringing phone
+    questContent: Find out the ringing phone
     tarSoundClip: Phone Ring-2
     otherSoundClips: []
     randomPlayAmount: 0
   - index: 6
-    questContent: (Telephone) Find out the ringing phone
+    questContent: Find out the ringing phone
     tarSoundClip: Phone Ring-3
     otherSoundClips: []
     randomPlayAmount: 0
   - index: 7
-    questContent: (Teddy) Find out the baby talk sound
+    questContent: Find out the baby talk sound
     tarSoundClip: Baby Talk-1
     otherSoundClips:
     - Frying Food-1
@@ -5393,14 +5383,12 @@ MonoBehaviour:
     - Bird Singing-1
     - Bird Singing-2
     - Bird Singing-3
-    - Laughter-2
-    - Laughter-3
     - Phone Ring-1
     - Phone Ring-2
     - Phone Ring-3
     randomPlayAmount: 2
   - index: 8
-    questContent: (Teddy) Find out the baby talk sound
+    questContent: Find out the baby talk sound
     tarSoundClip: Baby Talk-2
     otherSoundClips:
     - Frying Food-1
@@ -5409,14 +5397,12 @@ MonoBehaviour:
     - Bird Singing-1
     - Bird Singing-2
     - Bird Singing-3
-    - Laughter-1
-    - Laughter-3
     - Phone Ring-1
     - Phone Ring-2
     - Phone Ring-3
     randomPlayAmount: 2
   - index: 9
-    questContent: (Teddy) Find out the baby talk sound
+    questContent: Find out the baby talk sound
     tarSoundClip: Baby Talk-3
     otherSoundClips:
     - Frying Food-1
@@ -5425,72 +5411,97 @@ MonoBehaviour:
     - Bird Singing-1
     - Bird Singing-2
     - Bird Singing-3
-    - Laughter-1
-    - Laughter-2
     - Phone Ring-1
     - Phone Ring-2
     - Phone Ring-3
     randomPlayAmount: 2
   - index: 10
-    questContent: (Teddy) Find out the sounding doll
+    questContent: (Plushie) Find out the sounding plush toy
     tarSoundClip: Footstep-1
     otherSoundClips: []
     randomPlayAmount: 0
   - index: 11
-    questContent: (Teddy) Find out the sounding doll
+    questContent: (Plushie) Find out the sounding plush toy
     tarSoundClip: Footstep-2
     otherSoundClips: []
     randomPlayAmount: 0
   - index: 12
-    questContent: (Teddy) Find out the sounding doll
+    questContent: (Plushie) Find out the sounding plush toy
     tarSoundClip: Footstep-3
     otherSoundClips: []
     randomPlayAmount: 0
   - index: 13
     questContent: (Radio) Find out the gun shot sound
     tarSoundClip: Gun Shot-1
-    otherSoundClips: []
-    randomPlayAmount: 0
+    otherSoundClips:
+    - Bird Singing-2
+    - Bird Singing-3
+    - Waterfall-2
+    - Waterfall-3
+    randomPlayAmount: 2
   - index: 14
     questContent: (Radio) Find out the gun shot sound
     tarSoundClip: Gun Shot-2
-    otherSoundClips: []
-    randomPlayAmount: 0
+    otherSoundClips:
+    - Bird Singing-1
+    - Bird Singing-3
+    - Waterfall-1
+    - Waterfall-3
+    randomPlayAmount: 2
   - index: 15
     questContent: (Radio) Find out the gun shot sound
     tarSoundClip: Gun Shot-3
-    otherSoundClips: []
-    randomPlayAmount: 0
+    otherSoundClips:
+    - Bird Singing-1
+    - Bird Singing-2
+    - Waterfall-1
+    - Waterfall-2
+    randomPlayAmount: 2
   - index: 16
-    questContent: (Radio) Find out the fire sound
+    questContent: Find out the fire sound
     tarSoundClip: Campfire-1
     otherSoundClips: []
     randomPlayAmount: 0
   - index: 17
-    questContent: (Radio) Find out the fire sound
+    questContent: Find out the fire sound
     tarSoundClip: Campfire-2
     otherSoundClips: []
     randomPlayAmount: 0
   - index: 18
-    questContent: (Radio) Find out the fire sound
+    questContent: Find out the fire sound
     tarSoundClip: Campfire-3
     otherSoundClips: []
     randomPlayAmount: 0
   - index: 19
-    questContent: (Teddy) Find out the santa claus laughter
+    questContent: (Plushie) Find out the santa claus laughter
     tarSoundClip: Laughter-1
-    otherSoundClips: []
-    randomPlayAmount: 0
+    otherSoundClips:
+    - Campfire-1
+    - Campfire-2
+    - Campfire-3
+    - Footstep-2
+    - Footstep-3
+    randomPlayAmount: 2
   - index: 20
-    questContent: (Teddy) Find out the santa claus laughter
+    questContent: (Plushie) Find out the santa claus laughter
     tarSoundClip: Laughter-2
-    otherSoundClips: []
-    randomPlayAmount: 0
+    otherSoundClips:
+    - Campfire-1
+    - Campfire-2
+    - Campfire-3
+    - Footstep-1
+    - Footstep-3
+    randomPlayAmount: 2
   - index: 21
-    questContent: (Teddy) Find out the santa claus laughter
+    questContent: (Plushie) Find out the santa claus laughter
     tarSoundClip: Laughter-3
-    otherSoundClips: []
-    randomPlayAmount: 0
+    otherSoundClips:
+    - Campfire-1
+    - Campfire-2
+    - Campfire-3
+    - Footstep-1
+    - Footstep-2
+    randomPlayAmount: 2
   - index: 22
     questContent: Point out the sounding object
     tarSoundClip: Bark-2

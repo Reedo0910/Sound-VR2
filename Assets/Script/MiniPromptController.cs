@@ -22,9 +22,9 @@ public class MiniPromptController : MonoBehaviour
     IEnumerator conditionCompletedCoroutine = null;
 
     [SerializeField]
-    private string suggestionTextLeft = "If you cannot locate the sound, press X to skip";
+    private string suggestionTextLeft = "If you cannot locate the sound, press X / Y to skip";
     [SerializeField]
-    private string suggestionTextRight = "If you cannot locate the sound, press A to skip";
+    private string suggestionTextRight = "If you cannot locate the sound, press A / B to skip";
 
     [SerializeField]
     private string highlightingText = "Clue: The flashing objects are interactable in the test.";

@@ -35,7 +35,7 @@ public class TagManager : MonoBehaviour
     {
         if (container != null)
         {
-            if (AppManager.instance.myTestState == AppManager.TestType.Off)
+            if (!AppManager.instance.isTestStarted)
             {
                 container.gameObject.SetActive(true);
             }

@@ -1,28 +1,28 @@
 # VR Sound Mapping - Phase 2
 
-## Known Bug
-
-- Same audio may play from the same other Teddy/Radio
-
 ## Task List
 
-1. [long] (Radio 1 of 3) Find out the waterfall sound (0-2)
+1. [long] (Radio 1 long and 2(4) short) Find out the waterfall sound (0-2)
 
-2. [long] (Enviroment - barking dog) Point out the sounding object (3,22)
+2. [long] (Puppy chair - barking dog) (no clues) Point out the sounding object (3,22)
 
-3. [long] (Telephone) Find out the ringing phone (4-6)
+3. [long] (Telephone) (no clues) Find out the ringing phone (4-6)
 
-4. [long] (Teddy 1 of 3) Find out the baby talk sound (7-9)
+4. [long] (Plushie 1 long and 2(9) long) (no clues) Find out the baby talk sound (7-9)
 
-5. [short] (Teddy - footstep) Find out the sounding doll (10-12)
+5. [short] (Plushie - footstep) Find out the sounding plush toy (10-12)
 
-6. [short] (Radio) Find out the gun shot sound (13-15)
+6. [short] (Radio 1 short and 2(4) long) Find out the gun shot sound (13-15)
 
-7. [short] (Radio) Find out the fire sound (16-18)
+7. [short] (Radio) (no clues) Find out the fire sound (16-18)
 
-8. [short] (Teddy) Find out the santa claus laughter (19-21)
+8. [short] (Plushie 1 short and 2(5) short) Find out the santa claus laughter (19-21)
 
 ## Credits
+
+### Model
+
+- 3D Everything - Kids Room: https://assetstore.unity.com/packages/3d/props/interior/kids-room-48596
 
 ### Code
 

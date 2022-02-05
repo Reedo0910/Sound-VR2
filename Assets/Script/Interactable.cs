@@ -23,7 +23,7 @@ public class Interactable : MonoBehaviour
     }
     private void LateUpdate()
     {
-        if (AppManager.instance.myTestState == AppManager.TestType.Off)
+        if (!AppManager.instance.isTestStarted)
         {
             HighlightObject();
         }
@@ -47,7 +47,7 @@ public class Interactable : MonoBehaviour
 
     IEnumerator FlashObject()
     {
-        while (AppManager.instance.myTestState == AppManager.TestType.Off)
+        while (!AppManager.instance.isTestStarted)
         {
             yield return new WaitForSeconds(0.1f);
             if (isFlashingIn)

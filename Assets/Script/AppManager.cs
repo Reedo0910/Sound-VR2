@@ -21,7 +21,7 @@ public class AppManager : MonoBehaviour
 
     public bool isRightHanded = true; // use which controller by default
 
-    private bool isTestStarted = false;
+    public bool isTestStarted = false;
     private bool isTaskStarted = false;
 
     private string currentPlayingClip = "";
