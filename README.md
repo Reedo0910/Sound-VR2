@@ -77,6 +77,8 @@
 
 - Fire: <a href="https://www.flaticon.com/free-icons/fire" title="fire icons">Fire icons created by kosonicon - Flaticon</a>
 
+- Water gun: <a href="https://www.flaticon.com/free-icons/water-gun" title="water gun icons">Water gun icons created by Peter Lakenbrink - Flaticon</a>
+
 - Minimap gun: [CC0 License] from svg repo: https://www.svgrepo.com/svg/14148/submachine-gun
 
 - Waterfall: <a href="https://www.flaticon.com/free-icons/river" title="river icons">River icons created by Freepik - Flaticon</a>
