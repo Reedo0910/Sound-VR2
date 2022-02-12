@@ -5206,24 +5206,24 @@ MonoBehaviour:
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 0.5
   - title: Gun Shot-1
-    name: Gun Shot
-    sprite: {fileID: 21300000, guid: 7a015779de1223c48a3497cc697575e4, type: 3}
+    name: Gunshot
+    sprite: {fileID: 21300000, guid: 71b30f5b09c0bb54fa54834a36bdddcf, type: 3}
     tarObject: {fileID: 425031635}
     audioClip: {fileID: 8300000, guid: 90fd099f7d6133b408cf8902828615f5, type: 3}
     isLoop: 0
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Gun Shot-2
-    name: Gun Shot
-    sprite: {fileID: 21300000, guid: 7a015779de1223c48a3497cc697575e4, type: 3}
+    name: Gunshot
+    sprite: {fileID: 21300000, guid: 71b30f5b09c0bb54fa54834a36bdddcf, type: 3}
     tarObject: {fileID: 648982100}
     audioClip: {fileID: 8300000, guid: 90fd099f7d6133b408cf8902828615f5, type: 3}
     isLoop: 0
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Gun Shot-3
-    name: Gun Shot
-    sprite: {fileID: 21300000, guid: 7a015779de1223c48a3497cc697575e4, type: 3}
+    name: Gunshot
+    sprite: {fileID: 21300000, guid: 71b30f5b09c0bb54fa54834a36bdddcf, type: 3}
     tarObject: {fileID: 132303689}
     audioClip: {fileID: 8300000, guid: 90fd099f7d6133b408cf8902828615f5, type: 3}
     isLoop: 0
