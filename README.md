@@ -12,7 +12,7 @@
 
 5. [short] (Plushie - footstep) Find and identify the sounding plush toy (10-12)
 
-6. [short] (Radio 1 short and 2(4) long) Find the radio making the gun shot sound (13-15)
+6. [short] (Radio 1 short and 2(4) long) Find the radio making the gunshot sound (13-15)
 
 7. [short] (Radio) (no clues) Find the object making the fire sound (16-18)
 

@@ -5431,7 +5431,7 @@ MonoBehaviour:
     otherSoundClips: []
     randomPlayAmount: 0
   - index: 13
-    questContent: Find the radio making the gun shot sound
+    questContent: Find the radio making the gunshot sound
     tarSoundClip: Gun Shot-1
     otherSoundClips:
     - Bird Singing-2
@@ -5440,7 +5440,7 @@ MonoBehaviour:
     - Waterfall-3
     randomPlayAmount: 2
   - index: 14
-    questContent: Find the radio making the gun shot sound
+    questContent: Find the radio making the gunshot sound
     tarSoundClip: Gun Shot-2
     otherSoundClips:
     - Bird Singing-1
@@ -5449,7 +5449,7 @@ MonoBehaviour:
     - Waterfall-3
     randomPlayAmount: 2
   - index: 15
-    questContent: Find the radio making the gun shot sound
+    questContent: Find the radio making the gunshot sound
     tarSoundClip: Gun Shot-3
     otherSoundClips:
     - Bird Singing-1
