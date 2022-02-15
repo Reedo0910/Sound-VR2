@@ -14,7 +14,7 @@
 
 6. [short] (Radio 1 short and 2(4) long) Find the radio making the gunshot sound (13-15)
 
-7. [short] (Radio) (no clues) Find the object making the fire sound (16-18)
+7. [short] (Radio) (no clues) Find the object making the campfire sound (16-18)
 
 8. [short] (Plushie 1 short and 2(5) short) Find the plushie making the Santa Claus laughter sound (19-21)
 

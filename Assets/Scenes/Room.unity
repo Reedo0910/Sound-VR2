@@ -5230,7 +5230,7 @@ MonoBehaviour:
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Campfire-1
-    name: Campfire
+    name: Cracking Fire
     sprite: {fileID: 21300000, guid: 724b82b20b659d4458e5d82680622f95, type: 3}
     tarObject: {fileID: 425031635}
     audioClip: {fileID: 8300000, guid: 7480e11791adbd84e9734670430ca23b, type: 3}
@@ -5238,7 +5238,7 @@ MonoBehaviour:
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Campfire-2
-    name: Campfire
+    name: Cracking Fire
     sprite: {fileID: 21300000, guid: 724b82b20b659d4458e5d82680622f95, type: 3}
     tarObject: {fileID: 648982100}
     audioClip: {fileID: 8300000, guid: 7480e11791adbd84e9734670430ca23b, type: 3}
@@ -5246,7 +5246,7 @@ MonoBehaviour:
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Campfire-3
-    name: Campfire
+    name: Cracking Fire
     sprite: {fileID: 21300000, guid: 724b82b20b659d4458e5d82680622f95, type: 3}
     tarObject: {fileID: 132303689}
     audioClip: {fileID: 8300000, guid: 7480e11791adbd84e9734670430ca23b, type: 3}
@@ -5458,17 +5458,17 @@ MonoBehaviour:
     - Waterfall-2
     randomPlayAmount: 2
   - index: 16
-    questContent: Find the object making the fire sound
+    questContent: Find the object making the campfire sound
     tarSoundClip: Campfire-1
     otherSoundClips: []
     randomPlayAmount: 0
   - index: 17
-    questContent: Find the object making the fire sound
+    questContent: Find the object making the campfire sound
     tarSoundClip: Campfire-2
     otherSoundClips: []
     randomPlayAmount: 0
   - index: 18
-    questContent: Find the object making the fire sound
+    questContent: Find the object making the campfire sound
     tarSoundClip: Campfire-3
     otherSoundClips: []
     randomPlayAmount: 0
