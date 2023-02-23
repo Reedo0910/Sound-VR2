@@ -27,7 +27,7 @@ public class MiniPromptController : MonoBehaviour
     private string suggestionTextRight = "If you cannot locate the sound, press A / B to skip";
 
     [SerializeField]
-    private string highlightingText = "Clue: The flashing objects are interactable in the test.";
+    private string highlightingText = "Clue: The flashing objects are interactable.";
     [SerializeField]
     private string waitingText = "Please wait for the moderator to start a task...";
     [SerializeField]
@@ -52,7 +52,7 @@ public class MiniPromptController : MonoBehaviour
     {
         promptBoxObj = GameObject.Find("MiniPromptPanel");
         promptTextObj = GameObject.Find("MiniPromptPanel/PromptText");
-      
+
         promptText = promptTextObj.GetComponent<Text>();
 
         suggestionBoxObj = GameObject.Find("SuggestionPanel");
@@ -61,7 +61,12 @@ public class MiniPromptController : MonoBehaviour
 
         suggestionBoxObj.SetActive(false);
 
-        TaskHolding();
+        if (!AppManager.instance.isDemoOnly)
+        {
+            // Show holding prompt during test only
+            TaskHolding();
+        }
+
         HideTaskPrompt();
     }
 

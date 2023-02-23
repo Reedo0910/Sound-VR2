@@ -90,6 +90,9 @@ public class SocketModule : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Stop socket setup if demo only
+        if (AppManager.instance.isDemoOnly) { return; }
+
         // Read Config
         if (ConfigManager.instance.useTokenStr != null)
         {

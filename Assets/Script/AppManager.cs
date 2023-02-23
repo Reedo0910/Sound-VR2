@@ -27,6 +27,8 @@ public class AppManager : MonoBehaviour
     private string currentPlayingClip = "";
     private int currentAssignedTaskIndex = -1;
 
+    public bool isDemoOnly = false;
+
 
     [Serializable]
     class MySoundClip
@@ -225,6 +227,11 @@ public class AppManager : MonoBehaviour
             isBackgroundMusicMuted = bool.Parse(ConfigManager.instance.useMuteBackgroundMusicStr);
         }
 
+        if (ConfigManager.instance.useDemoStr != null)
+        {
+            isDemoOnly = bool.Parse(ConfigManager.instance.useDemoStr);
+        }
+
         HUDMap = GameObject.Find("HUDMiniMap");
         centerEyeAnchor = GameObject.Find("CenterEyeAnchor");
         playerObj = GameObject.Find("OVRPlayerController");
@@ -240,6 +247,24 @@ public class AppManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isDemoOnly)
+        {
+            if (Input.GetKeyUp(KeyCode.M) || OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryHandTrigger))
+            {
+                NextMethod();
+            }
+
+            if (Input.GetKeyUp(KeyCode.S))
+            {
+                StartTest(1);
+            }
+
+            if (Input.GetKeyUp(KeyCode.P))
+            {
+                StopTest();
+            }
+        }
+
         activeController = OVRInput.GetActiveController();
 
         // Dual controllers
@@ -314,7 +339,15 @@ public class AppManager : MonoBehaviour
         testStartDate = DateTime.UtcNow;
         currentAttempt = attempt;
 
-        testPrepareCoundownCoroutine = TestPrepareCountdown();
+        int myCountDown = 5;
+
+        if (isDemoOnly)
+        {
+            // No count down on demo
+            myCountDown = 0;
+        }
+
+        testPrepareCoundownCoroutine = TestPrepareCountdown(myCountDown);
         StartCoroutine(testPrepareCoundownCoroutine);
     }
 
@@ -336,7 +369,12 @@ public class AppManager : MonoBehaviour
 
         isTestStarted = false;
         DateTime testEndDate = DateTime.UtcNow;
-        SocketModule.instance.TestInfoUpdate((DateTime)testStartDate, testEndDate);
+
+        if (!isDemoOnly)
+        {
+            // submit result if test only
+            SocketModule.instance.TestInfoUpdate((DateTime)testStartDate, testEndDate);
+        }
 
         if (trackingCoroutine != null)
         {
@@ -345,7 +383,16 @@ public class AppManager : MonoBehaviour
 
         ResetTestState();
 
-        MiniPromptController.instance.TaskCompleted(isConditionEnd);
+        if (!isDemoOnly)
+        {
+            // show test finish prompt if test only
+            MiniPromptController.instance.TaskCompleted(isConditionEnd);
+        }
+        else
+        {
+            // looping the test if demo only
+            StartTest(1);
+        }
     }
 
     public void StopTest()
@@ -376,7 +423,11 @@ public class AppManager : MonoBehaviour
         isTaskStarted = false;
         ResetTestState();
 
-        MiniPromptController.instance.TaskHolding();
+        if (!isDemoOnly)
+        {
+            // show task holding prompt if test only
+            MiniPromptController.instance.TaskHolding();
+        }
     }
 
     private void StartATaskItr()
@@ -396,7 +447,15 @@ public class AppManager : MonoBehaviour
 
             MiniPromptController.instance.ShowTaskPrompt(currentTaskContent);
 
-            taskCoundownCoroutine = StartCountdown();
+            int myCountDown = 7;
+
+            if (isDemoOnly)
+            {
+                // no count down if demo only
+                myCountDown = 0;
+            }
+
+            taskCoundownCoroutine = StartCountdown(myCountDown);
             StartCoroutine(taskCoundownCoroutine);
         }
     }
@@ -832,7 +891,10 @@ public class AppManager : MonoBehaviour
 
             default:
                 myTestState = TestType.Off;
-                MiniPromptController.instance.HighlightingPreTask();
+                if (!isDemoOnly)
+                {
+                    MiniPromptController.instance.HighlightingPreTask();
+                }
                 break;
         }
 
@@ -849,7 +911,10 @@ public class AppManager : MonoBehaviour
 
             playerIndicatorOnMap.SetActive(true);
 
-            MiniPromptController.instance.TaskHolding();
+            if (!isDemoOnly)
+            {
+                MiniPromptController.instance.TaskHolding();
+            }
         }
     }
 
