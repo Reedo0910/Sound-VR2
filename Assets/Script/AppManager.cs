@@ -249,7 +249,7 @@ public class AppManager : MonoBehaviour
     {
         if (isDemoOnly)
         {
-            if (Input.GetKeyUp(KeyCode.M) || OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryHandTrigger))
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryHandTrigger))
             {
                 NextMethod();
             }
@@ -280,6 +280,22 @@ public class AppManager : MonoBehaviour
                         CompleteATask(null);
                     }
                 }
+
+                // Detect button inputs on the left controller
+                if (OVRInput.GetDown(OVRInput.Button.Four) || OVRInput.GetDown(OVRInput.Button.Three))
+                {
+                    if (isDemoOnly)
+                    {
+                        if (!isTestStarted)
+                        {
+                            StartTest(1);
+                        }
+                        else
+                        {
+                            StopTest();
+                        }
+                    }
+                }
             }
             else
             {
@@ -292,16 +308,47 @@ public class AppManager : MonoBehaviour
                     }
                 }
 
+                // Detect button inputs on the right controller
+                if (OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.One))
+                {
+                    if (isDemoOnly)
+                    {
+                        if (!isTestStarted)
+                        {
+                            StartTest(1);
+                        }
+                        else
+                        {
+                            StopTest();
+                        }
+                    }
+                }
+
             }
         }
         // Individual controller
         else
         {
-            if (OVRInput.GetDown(OVRInput.Button.Two) || OVRInput.GetDown(OVRInput.Button.One))
+            if (OVRInput.GetDown(OVRInput.Button.Two))
             {
                 if (isTestStarted && isTaskStarted && isSkippable)
                 {
                     CompleteATask(null);
+                }
+            }
+
+            if (OVRInput.GetDown(OVRInput.Button.One))
+            {
+                if (isDemoOnly)
+                {
+                    if (!isTestStarted)
+                    {
+                        StartTest(1);
+                    }
+                    else
+                    {
+                        StopTest();
+                    }
                 }
             }
         }

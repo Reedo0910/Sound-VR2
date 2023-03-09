@@ -31,31 +31,41 @@ public class ConfigManager : MonoBehaviour
             Destroy(transform.gameObject);
         }
 
-        ReadConfigFile();
+
+        // AppManager config
+        useLeftHandStr = "false";
+        useMuteBackgroundMusicStr = "true";
+        useDemoStr = "true";
+
+        // SocketIO config
+        useTokenStr = "0505";
+        useDevStr = "false";
+
+        //ReadConfigFile();
     }
 
-    private void ReadConfigFile()
-    {
-        //  Read from the configuration file
-        string configFile = Application.dataPath + "/config.ini";
-        // Packing the "xxx_data" directory seems to have not read file permissions inside
-        // So for the package, you need to put the configuration file config.ini in the same directory in EXE.
-#if !UNITY_EDITOR
-        configFile = System.Environment.CurrentDirectory + "/config.ini";
-#endif
-        if (File.Exists(configFile))
-        {
-            var parser = new FileIniDataParser();
-            IniData data = parser.ReadFile(configFile);
+//    private void ReadConfigFile()
+//    {
+//        //  Read from the configuration file
+//        string configFile = Application.dataPath + "/config.ini";
+//        // Packing the "xxx_data" directory seems to have not read file permissions inside
+//        // So for the package, you need to put the configuration file config.ini in the same directory in EXE.
+//#if !UNITY_EDITOR
+//        configFile = System.Environment.CurrentDirectory + "/config.ini";
+//#endif
+//        if (File.Exists(configFile))
+//        {
+//            var parser = new FileIniDataParser();
+//            IniData data = parser.ReadFile(configFile);
 
-            // AppManager config
-            useLeftHandStr = data["AppManager"]["is_left_handed"];
-            useMuteBackgroundMusicStr = data["AppManager"]["is_background_music_muted"];
-            useDemoStr = data["AppManager"]["is_demo_only"];
+//            // AppManager config
+//            useLeftHandStr = data["AppManager"]["is_left_handed"];
+//            useMuteBackgroundMusicStr = data["AppManager"]["is_background_music_muted"];
+//            useDemoStr = data["AppManager"]["is_demo_only"];
 
-            // SocketIO config
-            useTokenStr = data["SocketIO"]["token"];
-            useDevStr = data["SocketIO"]["is_dev"];
-        }
-    }
+//            // SocketIO config
+//            useTokenStr = data["SocketIO"]["token"];
+//            useDevStr = data["SocketIO"]["is_dev"];
+//        }
+//    }
 }
