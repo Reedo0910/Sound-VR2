@@ -19,6 +19,10 @@ public class ConfigManager : MonoBehaviour
     public string useDevStr;
     [HideInInspector]
     public string useDemoStr;
+    [HideInInspector]
+    public string useDemoDefaultStr;
+    [HideInInspector]
+    public string useLoopStr;
 
     void Awake()
     {
@@ -52,6 +56,8 @@ public class ConfigManager : MonoBehaviour
             useLeftHandStr = data["AppManager"]["is_left_handed"];
             useMuteBackgroundMusicStr = data["AppManager"]["is_background_music_muted"];
             useDemoStr = data["AppManager"]["is_demo_only"];
+            useDemoDefaultStr = data["AppManager"]["demo_default"];
+            useLoopStr = data["AppManager"]["is_loop"];
 
             // SocketIO config
             useTokenStr = data["SocketIO"]["token"];

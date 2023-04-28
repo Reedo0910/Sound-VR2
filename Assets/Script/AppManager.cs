@@ -249,12 +249,13 @@ public class AppManager : MonoBehaviour
     {
         if (isDemoOnly)
         {
-            if (Input.GetKeyUp(KeyCode.M) || OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger) || OVRInput.GetDown(OVRInput.Button.SecondaryHandTrigger))
+            if (Input.GetKeyUp(KeyCode.V) || OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger))
             {
-                NextMethod();
+                //NextMethod();
+                ToggleViz();
             }
 
-            if (Input.GetKeyUp(KeyCode.S))
+            if (Input.GetKeyUp(KeyCode.O))
             {
                 StartTest(1);
             }
@@ -326,6 +327,28 @@ public class AppManager : MonoBehaviour
         else
         {
             curState++;
+        }
+
+        SetTestState(curState);
+    }
+
+    private void ToggleViz()
+    {
+        int curState = (int)myTestState;
+        if (curState != 0)
+        {
+            curState = 0;
+        }
+        else
+        {
+            if (ConfigManager.instance.useDemoDefaultStr != null && int.TryParse(ConfigManager.instance.useDemoDefaultStr, out int configDefaultState))
+            {
+                curState = configDefaultState;
+            }
+            else
+            {
+                curState = 3;
+            }
         }
 
         SetTestState(curState);
@@ -788,7 +811,14 @@ public class AppManager : MonoBehaviour
 
             var objMusicPlayer = go.GetComponentInChildren<MusicPlayer>();
             objMusicPlayer.audioClip = obj.audioClip;
-            objMusicPlayer.isLoop = obj.isLoop;
+            objMusicPlayer.isLoop = false;
+            if (ConfigManager.instance.useLoopStr != null && bool.TryParse(ConfigManager.instance.useLoopStr, out bool parseBool))
+            {
+                if (parseBool)
+                {
+                    objMusicPlayer.isLoop = obj.isLoop;
+                }
+            }
             //objMusicPlayer.isAutoPlay = obj.isPlayOnWake;
             objMusicPlayer.indicatorIcon = obj.sprite;
             objMusicPlayer.indicatorText = obj.name;

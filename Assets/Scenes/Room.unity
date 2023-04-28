@@ -5099,7 +5099,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 15c158b40b8d13c49967a8911109e26f, type: 3}
     tarObject: {fileID: 1333421245}
     audioClip: {fileID: 8300000, guid: 0a052d24f6027734abdc29595d71c831, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1.2
   - title: Bark-2
@@ -5107,7 +5107,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 15c158b40b8d13c49967a8911109e26f, type: 3}
     tarObject: {fileID: 854503096}
     audioClip: {fileID: 8300000, guid: 0a052d24f6027734abdc29595d71c831, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1.2
   - title: Laughter-1
@@ -5115,7 +5115,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 7afe1aacc19d7f34fa8da372d5ef50e0, type: 3}
     tarObject: {fileID: 1233384868}
     audioClip: {fileID: 8300000, guid: 4bd8129850fddf743b348174d6b3f537, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 3
   - title: Laughter-2
@@ -5123,7 +5123,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 7afe1aacc19d7f34fa8da372d5ef50e0, type: 3}
     tarObject: {fileID: 1018588506}
     audioClip: {fileID: 8300000, guid: 4bd8129850fddf743b348174d6b3f537, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 3.5
   - title: Laughter-3
@@ -5131,7 +5131,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 7afe1aacc19d7f34fa8da372d5ef50e0, type: 3}
     tarObject: {fileID: 193665401}
     audioClip: {fileID: 8300000, guid: 4bd8129850fddf743b348174d6b3f537, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 2
   - title: Baby Talk-1
@@ -5139,7 +5139,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: dd82f6167613cb247aed5d875b78b8a9, type: 3}
     tarObject: {fileID: 1233384868}
     audioClip: {fileID: 8300000, guid: 3275931e7a1c2d143bc616f5d2d750f7, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 3
   - title: Baby Talk-2
@@ -5147,7 +5147,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: dd82f6167613cb247aed5d875b78b8a9, type: 3}
     tarObject: {fileID: 1018588506}
     audioClip: {fileID: 8300000, guid: 3275931e7a1c2d143bc616f5d2d750f7, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 3.5
   - title: Baby Talk-3
@@ -5155,7 +5155,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: dd82f6167613cb247aed5d875b78b8a9, type: 3}
     tarObject: {fileID: 193665401}
     audioClip: {fileID: 8300000, guid: 3275931e7a1c2d143bc616f5d2d750f7, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 2
   - title: Waterfall-1
@@ -5163,7 +5163,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: e7cdba57104ccc24bbd112b0af1230e7, type: 3}
     tarObject: {fileID: 425031635}
     audioClip: {fileID: 8300000, guid: 247374204e748da4b900ee01add33321, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Waterfall-2
@@ -5171,7 +5171,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: e7cdba57104ccc24bbd112b0af1230e7, type: 3}
     tarObject: {fileID: 648982100}
     audioClip: {fileID: 8300000, guid: 247374204e748da4b900ee01add33321, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Waterfall-3
@@ -5179,7 +5179,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: e7cdba57104ccc24bbd112b0af1230e7, type: 3}
     tarObject: {fileID: 132303689}
     audioClip: {fileID: 8300000, guid: 247374204e748da4b900ee01add33321, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Phone Ring-1
@@ -5187,7 +5187,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 60008737da23f9b4ab33b159d8dd9e34, type: 3}
     tarObject: {fileID: 1095705063}
     audioClip: {fileID: 8300000, guid: b745c9a400a860b4d96d7b8ef8bb7012, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 0.5
   - title: Phone Ring-2
@@ -5195,7 +5195,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 60008737da23f9b4ab33b159d8dd9e34, type: 3}
     tarObject: {fileID: 1098756238}
     audioClip: {fileID: 8300000, guid: b745c9a400a860b4d96d7b8ef8bb7012, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 0.5
   - title: Phone Ring-3
@@ -5203,7 +5203,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 60008737da23f9b4ab33b159d8dd9e34, type: 3}
     tarObject: {fileID: 1687194091}
     audioClip: {fileID: 8300000, guid: b745c9a400a860b4d96d7b8ef8bb7012, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 0.5
   - title: Gun Shot-1
@@ -5235,7 +5235,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 724b82b20b659d4458e5d82680622f95, type: 3}
     tarObject: {fileID: 425031635}
     audioClip: {fileID: 8300000, guid: 7480e11791adbd84e9734670430ca23b, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Campfire-2
@@ -5243,7 +5243,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 724b82b20b659d4458e5d82680622f95, type: 3}
     tarObject: {fileID: 648982100}
     audioClip: {fileID: 8300000, guid: 7480e11791adbd84e9734670430ca23b, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Campfire-3
@@ -5251,7 +5251,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 724b82b20b659d4458e5d82680622f95, type: 3}
     tarObject: {fileID: 132303689}
     audioClip: {fileID: 8300000, guid: 7480e11791adbd84e9734670430ca23b, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Footstep-1
@@ -5259,7 +5259,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: ca49f149b7ed3a04f8a70961cdaaf1b7, type: 3}
     tarObject: {fileID: 1233384868}
     audioClip: {fileID: 8300000, guid: 3576b71833a657c4ab62b5b58fe5a4c3, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 3
   - title: Footstep-2
@@ -5267,7 +5267,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: ca49f149b7ed3a04f8a70961cdaaf1b7, type: 3}
     tarObject: {fileID: 1018588506}
     audioClip: {fileID: 8300000, guid: 3576b71833a657c4ab62b5b58fe5a4c3, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 3.5
   - title: Footstep-3
@@ -5275,7 +5275,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: ca49f149b7ed3a04f8a70961cdaaf1b7, type: 3}
     tarObject: {fileID: 193665401}
     audioClip: {fileID: 8300000, guid: 3576b71833a657c4ab62b5b58fe5a4c3, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 2
   - title: Frying Food-1
@@ -5283,7 +5283,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: d8527fccbc729a9449de6ee6c7de5d78, type: 3}
     tarObject: {fileID: 425031635}
     audioClip: {fileID: 8300000, guid: 87a7a8dbb7b3d2241bc2600e9f74fc1d, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Frying Food-2
@@ -5291,7 +5291,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: d8527fccbc729a9449de6ee6c7de5d78, type: 3}
     tarObject: {fileID: 648982100}
     audioClip: {fileID: 8300000, guid: 87a7a8dbb7b3d2241bc2600e9f74fc1d, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Frying Food-3
@@ -5299,7 +5299,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: d8527fccbc729a9449de6ee6c7de5d78, type: 3}
     tarObject: {fileID: 132303689}
     audioClip: {fileID: 8300000, guid: 87a7a8dbb7b3d2241bc2600e9f74fc1d, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Bird Singing-1
@@ -5307,7 +5307,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 93fcd54a7f0352b4bb0209b4503f64d5, type: 3}
     tarObject: {fileID: 425031635}
     audioClip: {fileID: 8300000, guid: e96c20c40878ed94fb6d926d8cf818aa, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Bird Singing-2
@@ -5315,7 +5315,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 93fcd54a7f0352b4bb0209b4503f64d5, type: 3}
     tarObject: {fileID: 648982100}
     audioClip: {fileID: 8300000, guid: e96c20c40878ed94fb6d926d8cf818aa, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   - title: Bird Singing-3
@@ -5323,7 +5323,7 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: 93fcd54a7f0352b4bb0209b4503f64d5, type: 3}
     tarObject: {fileID: 132303689}
     audioClip: {fileID: 8300000, guid: e96c20c40878ed94fb6d926d8cf818aa, type: 3}
-    isLoop: 0
+    isLoop: 1
     scale: {x: 0.2, y: 0.2, z: 0.2}
     indicatorHeight: 1
   MyQuestList:
@@ -6368,6 +6368,8 @@ MonoBehaviour:
   useTokenStr: 
   useDevStr: 
   useDemoStr: 
+  useDemoDefaultStr: 
+  useLoopStr: 
 --- !u!4 &2043070454
 Transform:
   m_ObjectHideFlags: 0
