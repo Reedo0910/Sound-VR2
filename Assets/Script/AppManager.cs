@@ -194,6 +194,12 @@ public class AppManager : MonoBehaviour
     [NonSerialized]
     public List<OtherPlayingSourceObjectPositions> otherPlayingSourceObjectPositionsList = new List<OtherPlayingSourceObjectPositions>();
 
+
+    public bool isUIDisabled = false;
+
+    [SerializeField]
+    private Canvas UICanvas = null;
+
     void Awake()
     {
         if (instance == null)
@@ -263,6 +269,11 @@ public class AppManager : MonoBehaviour
             if (Input.GetKeyUp(KeyCode.P))
             {
                 StopTest();
+            }
+
+            if (Input.GetKeyUp(KeyCode.Q))
+            {
+                DisableUI();
             }
         }
 
@@ -352,6 +363,27 @@ public class AppManager : MonoBehaviour
         }
 
         SetTestState(curState);
+    }
+
+    private void DisableUI()
+    {
+        if (UICanvas == null)
+        {
+            return;
+        }
+
+        if (!isUIDisabled)
+        {
+            // Disable UI
+            UICanvas.enabled = false;
+        }
+        else
+        {
+            // Enable UI
+            UICanvas.enabled = true;
+        }
+
+        isUIDisabled = !isUIDisabled;
     }
 
     public void StartTest(int attempt)
@@ -708,11 +740,6 @@ public class AppManager : MonoBehaviour
         };
         userRotationsRecord.Add(userRotation);
 
-        //if (objectName == tarObjName)
-        //{
-        startHapticFeedback();
-        //}
-
         string selectedObjectName = "";
         Vector3 selectedObjectPosition = new Vector3(0, 0, 0);
 
@@ -720,6 +747,18 @@ public class AppManager : MonoBehaviour
         {
             selectedObjectName = selectedObject.name;
             selectedObjectPosition = selectedObject.transform.position;
+
+            if (isDemoOnly)
+            {
+                if (selectedObjectName.Equals(tarObjName))
+                {
+                    startHapticFeedback();
+                }
+            }
+            else
+            {
+                startHapticFeedback();
+            }
         }
 
         userSelectObjectNames.Add(selectedObjectName);
@@ -856,6 +895,13 @@ public class AppManager : MonoBehaviour
     {
         OVRInput.Controller activeControllerMask;
 
+        float waitingInterval = .1f;
+
+        if (isDemoOnly)
+        {
+            waitingInterval = .2f;
+        }
+
         if (activeController == OVRInput.Controller.Touch)
         {
             if (!isRightHanded)
@@ -875,7 +921,7 @@ public class AppManager : MonoBehaviour
         // Start Vibration
         OVRInput.SetControllerVibration(.7f, .2f, activeControllerMask);
 
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(waitingInterval);
 
         // Stop Vibration
         OVRInput.SetControllerVibration(0, 0, activeControllerMask);

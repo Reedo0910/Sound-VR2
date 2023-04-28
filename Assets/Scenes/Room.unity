@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.7706026, g: 0.77368873, b: 0.75478244, a: 1}
+  m_IndirectSpecularColor: {r: 0.5463098, g: 0.5512526, b: 0.52158564, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &4
 LightmapSettings:
@@ -5535,6 +5535,8 @@ MonoBehaviour:
   myTestState: 0
   currentAttempt: 0
   trackingScale: 0.1
+  isUIDisabled: 0
+  UICanvas: {fileID: 112775477}
 --- !u!4 &1657830282
 Transform:
   m_ObjectHideFlags: 0
